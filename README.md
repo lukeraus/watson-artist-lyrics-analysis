@@ -1,6 +1,6 @@
 
 # Project Originally cloned from:
-https://github.com/IBM-Bluemix/ziggy
+https://github.com/IBM/watson-hamilton-lyrics-analysis
 
 # Watson Personality Insights of Hamilton Musical Lyrics
 In this developer journey, we will create an app that compares personality traits of characters from the musical 'Hamilton' using Watson Personality Insights, Node JS, HTML, JS and CSS.
