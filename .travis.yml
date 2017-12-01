@@ -5,5 +5,9 @@ language: node_js
 node_js:
   - "8"
 
-before_script:
-  - npm start
+install:
+ - npm install
+
+script:
+  - npm start &
+  - npm test
