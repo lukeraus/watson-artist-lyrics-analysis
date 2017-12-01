@@ -95,13 +95,14 @@ function basicLineChart(color) {
   return lineChartData;
 }
 
-function process(album, factor, collection) {
+function process(persona, factor, collection) {
   var value = factor.percentile.toFixed(2) * 100;
 
   factor.children.forEach(function(trait) {
 
     var traitdata = {
-      'name': album.title,
+      'name': persona.character,
+      // 'year': personas[persona.data.id].start,
       'value': trait.percentile.toFixed(2) * 100
     };
 
@@ -114,7 +115,8 @@ function process(album, factor, collection) {
   })
 
   var data = {
-    'name': album.title,
+    'name': persona.character,
+    // 'year': personas[persona.data.id].start,
     'value': value
   };
 
@@ -322,7 +324,7 @@ function drawCharts() {
 
 function readCombinedData() {
 
-  var url = './samples/kanyewest.json';
+  var url = './samples/hamilton.json';
 
   var xmlhttp = new XMLHttpRequest();
 
@@ -332,39 +334,38 @@ function readCombinedData() {
 
       var personaCount = 0;
 
-      var factors = data.albums[0].insights.personality;
+      var factors = data[0].personality;
 
       for (var f = 0; f < factors.length; f++) {
         buildPicker(factors[f]);
       }
-      var albums = data.albums;
 
-      albums.forEach(function(album) {
+      data.forEach(function(persona) {
 
-        var bigfive = album.insights.personality;
+        var bigfive = persona.personality;
 
         bigfive.forEach(function(factor) {
 
           switch (factor.name) {
 
             case "Openness":
-              process(album, factor, openness);
+              process(persona, factor, openness);
               break;
 
             case "Conscientiousness":
-              process(album, factor, conscientiousness);
+              process(persona, factor, conscientiousness);
               break;
 
             case "Agreeableness":
-              process(album, factor, agreeableness);
+              process(persona, factor, agreeableness);
               break;
 
             case "Extraversion":
-              process(album, factor, extraversion);
+              process(persona, factor, extraversion);
               break;
 
             case "Emotional range":
-              process(album, factor, neuroticism);
+              process(persona, factor, neuroticism);
               break;
 
           }
