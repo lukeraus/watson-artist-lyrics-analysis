@@ -1,5 +1,5 @@
 
-# Watson Personality Insights of Hamilton Musical Lyrics
+# Watson Personality Insights of Artist Lyrics [![Build Status](https://travis-ci.org/lukeraus/watson-artist-lyrics-analysis.svg?branch=master)](https://travis-ci.org/lukeraus/watson-artist-lyrics-analysis)
 In this developer journey, we will create an app that compares personality traits of characters from the musical 'Hamilton' using Watson Personality Insights, Node JS, HTML, JS and CSS.
 
 ![](/design/hamilton-characters.png)
