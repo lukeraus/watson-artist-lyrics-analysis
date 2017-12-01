@@ -2,11 +2,14 @@ sudo: required
 
 language: node_js
 
-services:
-  - docker
+node_js:
+  - "8"
 
 before_install:
-  - docker build -t hamilton .
+  - npm install
+
+install:
+ - npm start
 
 script:
-  - docker run hamilton
+  - npm test
