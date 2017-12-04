@@ -24,6 +24,7 @@ exports.getAlbums = async (artistName) => {
 	};
 
 	return scrapeAlbums(options, artistName);
+
 	/* scrapeAlbums
 	 * in getAlbums, scrapeAlbums does the HTTP request and parsing of the HTML
 	 * factored out as a function so it can get called repeatedly when retrying names

@@ -1,0 +1,14 @@
+{
+    "extends": "airbnb",
+    "rules": {
+        "no-tabs": 0,
+        "indent": ["off", "tab"],
+        "comma-dangle": "off",
+        "no-use-before-define": "off",
+        "prefer-destructuring": "off",
+        "no-else-return": "off",
+        "no-plusplus": "off",
+        "no-mixed-operators": "off",
+        "no-var": "off"
+    }
+}
