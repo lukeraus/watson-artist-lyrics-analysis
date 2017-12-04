@@ -8,10 +8,7 @@
   },
   "dependencies": {
     "cfenv": "1.0.x",
-    "cheerio": "^1.0.0-rc.2",
     "express": "4.15.x",
-    "request": "^2.83.0",
-    "request-promise": "^4.2.2",
     "watson-developer-cloud": "^2.34.0"
   },
   "repository": {},

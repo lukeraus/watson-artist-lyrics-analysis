@@ -1,7 +1,7 @@
 var assert = require('assert');
 var expect = require('expect.js');
 var request = require('superagent');
-var scraper = require('../scraper/scraper.js');
+
 
 describe('Suite one: Mocha Sanity', function(){
     it('should return -1 when the value is not present', function() {
@@ -18,14 +18,6 @@ describe('Suite two: Basic gets', function(){
         .end((err, res) => {
             assert.equal(err, undefined, err);
             done();
-        });
-    });
-});
-
-describe('Suite three: Scraper test', function() {
-    it('Gives back a JSON array', (done) => {
-        scraper.scrape('Taylor Swift').then((result) => {
-            assert.notEqual(undefined, result.length);
         });
     });
 });
