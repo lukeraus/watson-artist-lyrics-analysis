@@ -80,7 +80,7 @@ exports.getAlbums = (artistName) => {
 					};
 				} else {
 					requestOptions.url = newUrl;
-					return getAlbums(requestOptions, cleanedName);
+					return scrapeAlbums(requestOptions, cleanedName);
 				}
 			});
 	}
@@ -144,15 +144,11 @@ exports.getLyricsFromAlbum = (album) => {
 
 let test = (artist) => {
 	exports.getAlbums(artist).then(albums => {
-		let album = albums.pop();
-		console.log(JSON.stringify(album, null, 4));
-		exports.getLyricsFromAlbum(album).then(lyrics => {
-			console.log(lyrics);
-		});
+		console.log(JSON.stringify(albums, null, 4));
 	});
-}
+};
 
-test("coldplay");
+test("kanye west");
 
 
 //TODO: Figure out how to wait for all time
