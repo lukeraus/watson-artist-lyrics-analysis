@@ -30,9 +30,8 @@ exports.getAlbums = async (artistName) => {
 	 * requestOptions - params used for the HTTP request
 	 * artistName - name of the artist, could be changed based on who called it
 	 */
-  const scrapeAlbums = async (requestOptions, formattedArtistName) => {
-    try {
-      const $ = await rp(requestOptions);
+  const scrapeAlbums = (requestOptions, formattedArtistName) => {
+    return rp(requestOptions).then(($) => {
       const albums = [];
       const albumElements = $('#listAlbum').children().filter('a:not([id]),div.album');
       let album;
@@ -60,7 +59,8 @@ exports.getAlbums = async (artistName) => {
         albums.push(album);
       }
       return albums;
-    } catch (err) {
+    })
+    .catch(() => {
       // 404 test for the case if it's stored by last name and not full name
       const split = formattedArtistName.toLowerCase().split(' ');
       let newUrl = '';
@@ -79,8 +79,9 @@ exports.getAlbums = async (artistName) => {
         newOptions.url = newUrl;
         return scrapeAlbums(newOptions, cleanedName);
       }
-    }
+    });
   };
+
   return scrapeAlbums(options, artistName);
 };
 
