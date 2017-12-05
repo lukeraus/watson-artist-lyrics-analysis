@@ -22,10 +22,12 @@ describe('Suite two: Basic gets', () => {
 });
 
 describe('Suite three: Scraper test', () => {
-    it('getAlbums() gives back a JSON array', (done) => {
-        scraper.getAlbums('Taylor Swift').then((result) => {
+    it('getAlbums() gives back a JSON array', async () => {
+        try {
+            const result = await scraper.getAlbums('Taylor Swift');
             assert.notEqual(undefined, result.length);
-            done();
-        });
+        } catch (err) {
+            throw err;
+        }
     });
 });
