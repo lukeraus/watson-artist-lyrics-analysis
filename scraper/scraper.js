@@ -144,5 +144,4 @@ exports.getLyricsFromAlbum = async (album) => {
 
 // test('kanye west');
 
-
 // TODO: Figure out how to wait for all time
