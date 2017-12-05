@@ -14,8 +14,8 @@ describe('Suite one: Mocha Sanity', () => {
 describe('Suite two: Basic gets', () => {
     it('Get index', (done) => {
         request.get('http://localhost:6001')
-        .end((err) => {
-            assert.equal(err, undefined, err);
+        .end((err, res) => {
+            assert.notEqual(res, undefined, err);
             done();
         });
     });
