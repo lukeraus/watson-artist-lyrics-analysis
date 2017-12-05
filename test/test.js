@@ -25,7 +25,7 @@ describe('Suite three: Scraper test', () => {
     it('getAlbums() gives back a JSON array', async () => {
         try {
             const result = await scraper.getAlbums('Taylor Swift');
-            assert.notEqual(undefined, result.length);
+            assert.notEqual(undefined, result.length, result);
         } catch (err) {
             throw err;
         }
