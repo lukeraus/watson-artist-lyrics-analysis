@@ -1,5 +1,12 @@
 {
     "extends": "airbnb",
+    "plugins": [
+        "mocha"
+    ],
+    "env": {
+        "node": true,
+        "mocha": true
+    },
     "rules": {
         "no-tabs": 0,
         "indent": ["off", "tab"],
@@ -9,6 +16,8 @@
         "no-else-return": "off",
         "no-plusplus": "off",
         "no-mixed-operators": "off",
+        "guard-for-in": "off",
+        "no-restricted-syntax": "off",
         "no-var": "off"
     }
 }
