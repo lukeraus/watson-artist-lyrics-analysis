@@ -108,7 +108,7 @@ exports.getLyricsFromAlbum = async (album) => {
     transform: body => cheerio.load(body)
   };
 
-  for (let i = 0; i < album.songs.length; i++) {
+  for (let i = 0; i < 1/* album.songs.length */; i++) {
     const song = album.songs[i];
     requestOptions.url = song.url;
 
@@ -171,6 +171,6 @@ const test = async (artist) => {
   }
 };
 
-test('justin timberlake');
+// test('justin timberlake');
 
 // TODO: Figure out how to wait for all time

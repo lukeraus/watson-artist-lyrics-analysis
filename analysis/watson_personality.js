@@ -1,10 +1,9 @@
 const fs = require('fs');
 const PersonalityInsightsV3 = require('watson-developer-cloud/personality-insights/v3');
 
-const config = JSON.parse(fs.readFileSync('./analysis/credentials.json'));
 /* read credentials and create a personality insights object to work with */
-const pi = config.personality_insights[0].credentials;
-const personalityInsights = new PersonalityInsightsV3({ username: pi.username, password: pi.password, version_date: '2016-10-19' });
+const config = JSON.parse(fs.readFileSync('./analysis/credentials.json'));
+const personalityInsights = new PersonalityInsightsV3({ username: config.username, password: config.password, version_date: '2016-10-19' });
 
 
 exports.getPeronalityInsights = async (artistLyrics, artistName) => {
