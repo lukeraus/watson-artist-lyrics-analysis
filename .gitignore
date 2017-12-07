@@ -1,2 +1,4 @@
 /node_modules/
 /config/credentials.json
+/scraper/text/
+/analysis/credentials.json

@@ -12,7 +12,7 @@
     "express": "4.15.x",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
-    "watson-developer-cloud": "^2.34.0"
+    "watson-developer-cloud": "^2.42.0"
   },
   "repository": {},
   "engines": {
