@@ -6,27 +6,31 @@ const config = JSON.parse(fs.readFileSync('./analysis/credentials.json'));
 const personalityInsights = new PersonalityInsightsV3({ username: config.username, password: config.password, version_date: '2016-10-19' });
 
 
-exports.getPeronalityInsights = async (artistLyrics, artistName, albumTitle) => {
+function saveInsightsToFile(results, artistName, albumTitle) {
+    const albumTitleCompress = albumTitle.toLowerCase().split(' ').join('').replace('/', '-');
+    const artistNameCompress = artistName.toLowerCase().split(' ').join('');
+    const albumDir = `./analysis/artists_results/${artistNameCompress}`;
+    if (!fs.existsSync(albumDir)) {
+        fs.mkdirSync(albumDir);
+    }
+    const fileName = `./analysis/artists_results/${artistNameCompress}/${albumTitleCompress}.json`;
+    fs.writeFile(fileName, JSON.stringify(results, null, 4), (error) => {
+      if (error) throw error;
+      console.log(`File completed: ${fileName}`);
+    });
+}
+
+function getAlbumInsights(artistLyrics, artistName, albumTitle) {
     personalityInsights.profile({
         text: artistLyrics,
         consumption_preferences: true
     }, (err, response) => {
-        if (err) { throw err; }
-        const albumTitleCompress = albumTitle.toLowerCase().split(' ').join('').replace('/', '-');
-        const artistNameCompress = artistName.toLowerCase().split(' ').join('');
-        const albumDir = `./analysis/artists_results/${artistNameCompress}`;
-        if (!fs.existsSync(albumDir)) {
-            fs.mkdirSync(albumDir);
-        }
-        const fileName = `./analysis/artists_results/${artistNameCompress}/${albumTitleCompress}.json`;
-        fs.writeFile(fileName, JSON.stringify(response, null, 4), (error) => {
-          if (error) throw error;
-          console.log(`File completed: ${fileName}`);
-        });
+        if (err) throw err;
+        saveInsightsToFile(response, artistName, albumTitle);
     });
-};
+}
 
-const test = async (lyricsFileJSON) => {
+exports.getArtistPeronalityInsights = async (lyricsFileJSON) => {
     try {
         const contents = fs.readFileSync(lyricsFileJSON);
         // Define to JSON type
@@ -40,11 +44,11 @@ const test = async (lyricsFileJSON) => {
                 albumLyrics += lyricsJSON.albums[i].songs[x].lyrics;
             }
             console.log(`Getting analysis on album: ${albumTitle}`);
-            exports.getPeronalityInsights(albumLyrics, lyricsJSON.artist, albumTitle);
+            getAlbumInsights(albumLyrics, lyricsJSON.artist, albumTitle);
         }
     } catch (rejectionError) {
         throw rejectionError;
     }
 };
 
-test('./scraper/text/justintimberlake.json');
+exports.getArtistPeronalityInsights('./scraper/text/justintimberlake.json');
