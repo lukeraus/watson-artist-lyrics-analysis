@@ -1,6 +1,5 @@
 const fs = require('fs');
 const PersonalityInsightsV3 = require('watson-developer-cloud/personality-insights/v3');
-
 /* read credentials and create a personality insights object to work with */
 const config = JSON.parse(fs.readFileSync('./analysis/credentials.json'));
 const personalityInsights = new PersonalityInsightsV3({ username: config.username, password: config.password, version_date: '2016-10-19' });
@@ -30,21 +29,33 @@ function getAlbumInsights(artistLyrics, artistName, albumTitle) {
     });
 }
 
+function parseLyricsJSON(lyricsJSON) {
+    const albumsAndLyrics = [];
+    for (let i = 0; i < lyricsJSON.albums.length; i++) {
+        let albumLyricsBuilder = '';
+        for (let x = 0; x < lyricsJSON.albums[i].songs.length; x++) {
+            albumLyricsBuilder += lyricsJSON.albums[i].songs[x].lyrics;
+        }
+        albumsAndLyrics.push({
+            albumLyrics: albumLyricsBuilder,
+            artistName: lyricsJSON.artist,
+            albumTitle: lyricsJSON.albums[i].album,
+        });
+    }
+    return albumsAndLyrics;
+}
+
 exports.getArtistPeronalityInsights = async (lyricsFileJSON) => {
     try {
         const contents = fs.readFileSync(lyricsFileJSON);
         // Define to JSON type
         const lyricsJSON = JSON.parse(contents);
+        const albumsAndLyrics = parseLyricsJSON(lyricsJSON);
 
         console.log(`Getting analysis on Artist: ${lyricsJSON.artist}`);
-        for (let i = 0; i < lyricsJSON.albums.length; i++) {
-            const albumTitle = lyricsJSON.albums[i].album;
-            let albumLyrics = '';
-            for (let x = 0; x < lyricsJSON.albums[i].songs.length; x++) {
-                albumLyrics += lyricsJSON.albums[i].songs[x].lyrics;
-            }
-            console.log(`Getting analysis on album: ${albumTitle}`);
-            getAlbumInsights(albumLyrics, lyricsJSON.artist, albumTitle);
+        for (const info of albumsAndLyrics) {
+            console.log(`Getting analysis on album: ${info.albumTitle}`);
+            getAlbumInsights(info.albumLyrics, info.artistName, info.albumTitle);
         }
     } catch (rejectionError) {
         throw rejectionError;
