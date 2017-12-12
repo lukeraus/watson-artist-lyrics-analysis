@@ -26,6 +26,8 @@ describe('Travis Debug', () => {
   it('Should connect with 200 to www.google.com', () => {
       request.get('http://www.google.com')
       .end((err, res) => {
+          // log the result
+          pprint(res);
           assert.notEqual(res, undefined, err);
           assert.equal(res.statusCode, 200);          
       });
