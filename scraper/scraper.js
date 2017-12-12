@@ -20,8 +20,14 @@ exports.getAlbums = async (artistName) => {
 		url: `https://www.azlyrics.com/${letterCategory}/${cleanedName}.html`,
 		headers: {
 			'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36'
-		},
-		transform: body => cheerio.load(body)
+    },
+    //transform: body => cheerio.load(body)
+    transform: (body, response, resolveWithFullResponse)  => {
+      console.log('Status Code');
+      console.log(response.statusCode);
+      return cheerio.load(body);
+    } 
+    // transform2xxOnly: true
 		// middleware applied to quickly be able to parse the html result immediately
   };
 
@@ -33,8 +39,8 @@ exports.getAlbums = async (artistName) => {
 	 */
   const scrapeAlbums = async (requestOptions, formattedArtistName) => {
     let $;
-    try {
-      $ = await rp(requestOptions);
+    try {      
+      $ = await rp(requestOptions);            
       const albums = [];
       const albumElements = $('#listAlbum').children().filter('a:not([id]),div.album');
       let album;

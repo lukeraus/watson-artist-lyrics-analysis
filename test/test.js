@@ -23,13 +23,12 @@ describe('Suite two: Basic gets', () => {
 
 
 describe('Travis Debug', () => {
-  it('Should connect with 200 to www.google.com', () => {
+  it('Should connect with 200 to www.google.com', (done) => {
       request.get('http://www.google.com')
-      .end((err, res) => {
-          // log the result
-          pprint(res);
+      .end((err, res) => {                    
           assert.notEqual(res, undefined, err);
           assert.equal(res.statusCode, 200);          
+          done();
       });
   });
 });
@@ -39,8 +38,8 @@ describe('Suite three: Scraper test', () => {
     it('getAlbums() gives back a JSON array', () => {
         const artist = 'Kanye West';
         return scraper.getAlbums(artist).then((result) => {
-            console.log(JSON.stringify(result, null, 2));
-            console.log(result.length);
+            // console.log(JSON.stringify(result, null, 2));
+            // console.log(result.length);
             assert.notEqual(undefined, result.length);
         })
         .catch((err) => {
