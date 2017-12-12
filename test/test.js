@@ -34,6 +34,7 @@ describe('Travis Debug', () => {
 
   it('Should connect with 200 to azlyrics for Kayne West using last name', (done) => {   
     request.get('https://www.azlyrics.com/w/west.html')
+    .set('User-Agent', "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36")
     .end((err, res) => {
         assert.notEqual(res, undefined, err);
         assert.equal(res.statusCode, 200);          
@@ -43,6 +44,7 @@ describe('Travis Debug', () => {
 
   it('Should NOT connect with 200 to azlyrics for Kayne West using first name', (done) => {   
     request.get('https://www.azlyrics.com/k/kanye.html')
+    .set('User-Agent', "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36")
     .end((err, res) => {
         assert.notEqual(res, undefined, err);
         assert.equal(res.statusCode, 404);          
