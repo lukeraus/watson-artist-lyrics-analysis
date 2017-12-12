@@ -116,10 +116,7 @@ exports.getLyricsFromAlbum = async (album) => {
     const delay = (Math.random() * 10 + 5) * 1000;
     try {
       const $ = await new Promise(resolve => // eslint-disable-line no-await-in-loop
-        setTimeout(() => {
-          const data = rp(requestOptions);
-          resolve(data);
-        }, delay));
+        setTimeout(() => resolve(rp(requestOptions)), delay));
       // selects the div that contains all the lyrics
       const rawLyrics = $('.col-xs-12.col-lg-8.text-center div:not([class])').text();
       // applies a regex to strip things like "[CHORUS: ]" and excess newlines
