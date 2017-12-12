@@ -39,7 +39,7 @@ describe('Travis Debug', () => {
         assert.equal(res.statusCode, 200);          
         done();
     });
-  });
+  }).timeout(10000);
 
   it('Should NOT connect with 200 to azlyrics for Kayne West using first name', (done) => {   
     request.get('https://www.azlyrics.com/k/kanye.html')
@@ -48,7 +48,7 @@ describe('Travis Debug', () => {
         assert.equal(res.statusCode, 404);          
         done();
     });
-  });
+  }).timeout(10000);
 });
 
 
