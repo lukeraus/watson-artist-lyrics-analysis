@@ -15,7 +15,8 @@ exports.getAlbums = async (artistName) => {
 	// ie. /j/jackson instead of /m/michaeljackson
 	// bands mind get a "band" appended at the end, ie. U2
 
-	let letterCategory = cleanedName.startsWith('the') ? cleanedName[3] : cleanedName[0];
+  let letterCategory = cleanedName.startsWith('the') ? cleanedName[3] : cleanedName[0];
+  console.log(`https://www.azlyrics.com/${letterCategory}/${cleanedName}.html`);
   const options = {
 		url: `https://www.azlyrics.com/${letterCategory}/${cleanedName}.html`,
 		headers: {
@@ -79,6 +80,7 @@ exports.getAlbums = async (artistName) => {
         letterCategory = cleanedName.startsWith('the') ? cleanedName[3] : cleanedName[0];
         newUrl = `https://www.azlyrics.com/${letterCategory}/${cleanedName}.html`;
       }
+      console.log(newUrl);
       if (newUrl === requestOptions.url || split.length === 1) {
         return {
           error: 'ERROR',
