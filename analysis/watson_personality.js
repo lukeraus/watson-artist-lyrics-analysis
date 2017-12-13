@@ -45,7 +45,7 @@ function parseLyricsJSON(lyricsJSON) {
     return albumsAndLyrics;
 }
 
-exports.getArtistPeronalityInsights = async (lyricsFileJSON) => {
+exports.getArtistPersonalityInsights = async (lyricsFileJSON) => {
     try {
         const contents = fs.readFileSync(lyricsFileJSON);
         // Define to JSON type
@@ -62,4 +62,4 @@ exports.getArtistPeronalityInsights = async (lyricsFileJSON) => {
     }
 };
 
-exports.getArtistPeronalityInsights('./scraper/text/justintimberlake.json');
+// exports.getArtistPersonalityInsights('./scraper/text/justintimberlake.json');

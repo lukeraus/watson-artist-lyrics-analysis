@@ -58,8 +58,12 @@ const getMetadata = async (query, queryType, accessToken) => {
 
 exports.getArtistMetadata = async (artistName, accessToken) => {
 	try {
-		const artists = await getMetadata(artistName, metadataTypes.ARTIST, accessToken);
-		return artists[0];
+		const result = await getMetadata(artistName, metadataTypes.ARTIST, accessToken);
+		const artist = result[0];
+		delete artist.type;
+		artist.images = artist.images[0];
+		artist.followers = artist.followers.total;
+		return artist;
 	} catch (err) {
 		return {
 			errorMessage: `ERROR: Exception throw when querying '${artistName}'`,
@@ -97,7 +101,21 @@ exports.getAlbumMetadata = async (albumName, artist, accessToken) => {
 			json: true
 		};
 		const album = await rp(requestOptions);
-		return album;
+
+		return {
+			name: album.name,
+			originalName: albumName,
+			label: album.label,
+			release_date: album.release_date,
+			release_date_precision: album.release_date_precision,
+			artists: album.artists.map(albumArtist => albumArtist.name),
+			copyrights: album.copyrights,
+			popularity: album.popularity,
+			genres: album.genres,
+			images: album.images[0],
+			url: album.external_urls.spotify,
+			uri: album.uri
+		};
 	} catch (err) {
 		return {
 			errorMessage: `ERROR: Exception thrown when querying '${albumName}'`,
@@ -113,11 +131,10 @@ exports.getAlbumMetadata = async (albumName, artist, accessToken) => {
 exports.checkPrecision = (albums) => {
 	const warningAlbums = albums.filter((album) => {
 		const hasWarning = album.errorMessage || album.release_date_precision !== 'day';
-		if (album.release_date_precision !== 'day') {
-			console.log(`WARNING: Album ${album.name}'s release date(${album.release_date}) is of precision ${album.release_date_precision}`);
-		}
 		if (album.errorMessage) {
-			console.log(`ERROR: Album ${album.name} errored because '${album.errorMessage}'`);
+			console.log(`ERROR: Album '${album.name}' errored because '${album.errorMessage}'`);
+		} else if (album.release_date_precision !== 'day') {
+			console.log(`WARNING: Album '${album.name}' has a release date(${album.release_date}) of precision ${album.release_date_precision}`);
 		}
 		return hasWarning;
 	});
@@ -127,9 +144,8 @@ exports.checkPrecision = (albums) => {
 
 const test = async (artistName) => {
 	const accessToken = await exports.getAccessToken();
-	console.log(accessToken);
 	const artist = await exports.getArtistMetadata(artistName, accessToken);
-	console.log(artist.name);
+	console.log(artist);
 	let albumNames = ['NOt his album thoo', 'Graduation'];
 
 	albumNames = albumNames.map((albumTitle) => {
@@ -148,4 +164,4 @@ const test = async (artistName) => {
 	exports.checkPrecision(albums);
 };
 
-test('Kanye West');
+// test('Kanye West');
