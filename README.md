@@ -5,7 +5,7 @@ This node application uses Watson Personality insights to anaylize an artist's p
 Each album's lyrics are analyized separately giving us an insight to an artist's personality in relation to their music across their career. 
 
 
-# Run personality 
+# Get Personality Insights
 1. Install [nodeJS version 8](https://nodejs.org/en/) 
 2. Clone this repo
 3. Run `npm install`
