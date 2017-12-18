@@ -4,28 +4,15 @@ const PersonalityInsightsV3 = require('watson-developer-cloud/personality-insigh
 const config = JSON.parse(fs.readFileSync('./credentials.json')).personalityInsights;
 const personalityInsights = new PersonalityInsightsV3({ username: config.username, password: config.password, version_date: '2016-10-19' });
 
-
-function saveInsightsToFile(results, artistName, albumTitle) {
-    const albumTitleCompress = albumTitle.toLowerCase().split(' ').join('').replace('/', '-');
-    const artistNameCompress = artistName.toLowerCase().split(' ').join('');
-    const albumDir = `./analysis/artists_results/${artistNameCompress}`;
-    if (!fs.existsSync(albumDir)) {
-        fs.mkdirSync(albumDir);
-    }
-    const fileName = `./analysis/artists_results/${artistNameCompress}/${albumTitleCompress}.json`;
-    fs.writeFile(fileName, JSON.stringify(results, null, 4), (error) => {
-      if (error) throw error;
-      console.log(`File completed: ${fileName}`);
-    });
-}
-
-function getAlbumInsights(artistLyrics, artistName, albumTitle) {
-    personalityInsights.profile({
-        text: artistLyrics,
-        consumption_preferences: true
-    }, (err, response) => {
-        if (err) throw err;
-        saveInsightsToFile(response, artistName, albumTitle);
+function getInsightsPromise(artistLyrics) {
+    return new Promise((resolve, reject) => {
+        personalityInsights.profile({
+            text: artistLyrics,
+            consumption_preferences: true
+        }, (err, response) => {
+            if (err) reject(err);
+            resolve(response);
+        });
     });
 }
 
@@ -45,18 +32,18 @@ function parseLyricsJSON(lyricsJSON) {
     return albumsAndLyrics;
 }
 
-exports.getArtistPersonalityInsights = async (lyricsFileJSON) => {
+exports.getArtistPersonalityInsights = async (lyricsJSON) => {
     try {
-        const contents = fs.readFileSync(lyricsFileJSON);
-        // Define to JSON type
-        const lyricsJSON = JSON.parse(contents);
         const albumsAndLyrics = parseLyricsJSON(lyricsJSON);
+        const promises = [];
 
         console.log(`Getting analysis on Artist: ${lyricsJSON.artist}`);
         for (const info of albumsAndLyrics) {
-            console.log(`Getting analysis on album: ${info.albumTitle}`);
-            getAlbumInsights(info.albumLyrics, info.artistName, info.albumTitle);
+            promises.push(getInsightsPromise(info.albumLyrics, info.artistName, info.albumTitle));
         }
+
+        const personalities = await Promise.all(promises);
+        return personalities;
     } catch (rejectionError) {
         throw rejectionError;
     }

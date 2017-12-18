@@ -14,12 +14,22 @@ const metadataCollector = require('../scraper/metadataCollector.js');
 exports.run = async (artistName) => {
 	try {
 		// Scrape inital album list from AZLyrics
+		// TODO: Don't mutate scrapedAlbums so much
 		let scrapedAlbums = await scraper.getAlbums(artistName);
 		console.log(`Scraping ${artistName} tracklist: DONE`);
 
 		const scrapedJson = {
 			artist: artistName,
 			albums: []
+		};
+
+		const resultJson = {
+			artist: {
+				name: artistName,
+				metadata: {}
+			},
+			albums: [],
+			lifeEvents: []
 		};
 
 		// Get all metadata from Spotify
@@ -30,23 +40,31 @@ exports.run = async (artistName) => {
 		const artist = await metadataCollector.getArtistMetadata(artistName, accessToken);
 		console.log('Spotify artist metadata received');
 
-		let albumNames = scrapedAlbums.map(albumObj => albumObj.albumTitle);
-		albumNames = albumNames.map((albumTitle) => {
+		resultJson.artist.metadata = artist;
+
+		const metadataPromises = scrapedAlbums.map((album) => {
 			const promise = new Promise(async (resolve) => {
 				const albumMetadata = await metadataCollector
-					.getAlbumMetadata(albumTitle, artist, accessToken);
-				console.log(`Spotify album metadata for ${albumTitle} received`);
+					.getAlbumMetadata(album.albumTitle, artist, accessToken);
+				console.log(`Spotify album metadata for ${album.albumTitle} received`);
 				resolve(albumMetadata);
 			});
 			return promise;
 		});
-		const albums = await Promise.all(albumNames);
+		const albums = await Promise.all(metadataPromises);
+
 		metadataCollector.checkPrecision(albums);
+		console.log(albums.map(album => album.name));
 		console.log('All Spotify album metadata received');
 
-		const metadataJson = { artist, albums };
-		const metadataFilename = `./scraper/text/${artistName.toLowerCase().split(' ').join('')}-metadata.json`;
-		fs.writeFileSync(metadataFilename, JSON.stringify(metadataJson, null, 4));
+		albums.forEach((album, i) => {
+			if (!album.errorMessage) {
+				resultJson.albums.push({
+					title: scrapedAlbums[i].albumTitle,
+					metadata: album
+				});
+			}
+		});
 
 		// filtering to Spotify because Spotify returns studio albums, while AZLyrics also does EPs
 		scrapedAlbums = scrapedAlbums.filter((scrapedAlbum) => {
@@ -72,13 +90,15 @@ exports.run = async (artistName) => {
 		console.log('Scraping albums: DONE');
 		console.log('----------');
 
-		// Write to file because 'watsonPersonality.getArtistPersonalityInsights 'reads from a file
-		const fileName = `./scraper/text/${artistName.toLowerCase().split(' ').join('')}.json`;
-		fs.writeFileSync(fileName, JSON.stringify(scrapedJson, null, 4));
-
 		// Run through personality insights
-		await watsonPersonality.getArtistPersonalityInsights(fileName);
+		const insights = await watsonPersonality.getArtistPersonalityInsights(scrapedJson);
+		insights.forEach((insight, i) => {
+			resultJson.albums[i].insights = insight;
+		});
 		console.log('Personality Insights received');
+
+		const fileName = `./analysis/artists_results/${artistName.toLowerCase().split(' ').join('')}.json`;
+		fs.writeFileSync(fileName, JSON.stringify(resultJson, null, 4));
 
 		// And we oooout
 		console.log('DONE');
@@ -88,4 +108,4 @@ exports.run = async (artistName) => {
 };
 
 
-// exports.run('Kanye West');
+exports.run(process.argv[2] || 'Taylor Swift');

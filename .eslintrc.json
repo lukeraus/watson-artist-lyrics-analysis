@@ -18,6 +18,7 @@
         "no-mixed-operators": "off",
         "guard-for-in": "off",
         "no-restricted-syntax": "off",
-        "no-var": "off"
+        "no-var": "off",
+        "no-console": "off"
     }
 }
