@@ -1,5 +1,5 @@
 {
-  "name": "NodejsStarterApp",
+  "name": "watson-artist-lyrics-analysis",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -8,17 +8,25 @@
   },
   "dependencies": {
     "cfenv": "1.0.x",
-    "expect.js": "^0.3.1",
+    "cheerio": "^1.0.0-rc.2",
     "express": "4.15.x",
-    "line-reader": "^0.4.0",
-    "superagent": "^3.5.2",
-    "watson-developer-cloud": "^2.34.0"
+    "request": "^2.83.0",
+    "request-promise": "^4.2.2",
+    "watson-developer-cloud": "^2.42.0"
   },
   "repository": {},
   "engines": {
-    "node": "6.x"
+    "node": "8.x"
   },
   "devDependencies": {
-    "mocha": "^4.0.1"
+    "eslint": "^4.12.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-mocha": "^4.11.0",
+    "eslint-plugin-react": "^7.5.1",
+    "expect.js": "^0.3.1",
+    "mocha": "^4.0.1",
+    "superagent": "^3.5.2"
   }
 }
