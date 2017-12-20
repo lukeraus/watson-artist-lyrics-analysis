@@ -53,12 +53,11 @@ Each album's lyrics are analyized separately giving us an insight to an artist's
 ```
 
 # Run Locally (Website)
-These steps will be used when the project is farther along for now use setps above ^
 1. install [nodeJS version 8](https://nodejs.org/en/)
 2. clone this repo
 3. run `npm install`
 4. run `npm start`
-5. go to http://localhost:6001 to see the website!
+5. go to http://localhost:6001 to see some charts!
 
 # Run Tests
 1. run test by calling `npm test`
