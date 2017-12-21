@@ -247,7 +247,6 @@ const generateAreaChart = () => {
 	});
 
 	const fileName = `./analysis/svgs/${data.artist.name.toLowerCase().split(' ').join('')}-area-chart.svg`;
-	console.log(fileName);
 	fs.writeFileSync(fileName, d3.select('#container').html());
 };
 
