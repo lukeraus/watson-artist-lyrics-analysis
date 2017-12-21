@@ -173,7 +173,8 @@ const generateAreaChart = () => {
 
 		g.append('g').at({
 			transform: `translate(${0}, ${height})`
-		});
+		})
+		.call(xAxis);
 
 		g.append('path')
 			.data([subset])
@@ -226,7 +227,7 @@ const generateAreaChart = () => {
 			.text(trait)
 			.at({
 				class: 'trait-title',
-				fontWeight: j === 0 ? 800: 400,
+				fontWeight: j === 0 ? 800 : 400,
 				paintOrder: 'stroke',
 				stroke: 'rgba(255, 255, 255, 0.9)',
 				strokeWidth: 4
