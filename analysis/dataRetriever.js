@@ -11,12 +11,17 @@ const metadataCollector = require('../scraper/metadataCollector.js');
  * write to file
  * run personality insights on it
  */
-exports.run = async (artistName) => {
+exports.run = async (artistName, spotifyName) => {
 	try {
 		// Scrape inital album list from AZLyrics
 		// TODO: Don't mutate scrapedAlbums so much
 		let scrapedAlbums = await scraper.getAlbums(artistName);
 		console.log(`Scraping ${artistName} tracklist: DONE`);
+
+		if (scrapedAlbums.error) {
+			console.log(scrapedAlbums.result);
+			return;
+		}
 
 		const scrapedJson = {
 			artist: artistName,
@@ -37,7 +42,8 @@ exports.run = async (artistName) => {
 		const accessToken = await metadataCollector.getAccessToken();
 		console.log('Spotify Access Token received');
 
-		const artist = await metadataCollector.getArtistMetadata(artistName, accessToken);
+		const artist = await metadataCollector
+			.getArtistMetadata(spotifyName || artistName, accessToken);
 		console.log('Spotify artist metadata received');
 
 		resultJson.artist.metadata = artist;
@@ -108,4 +114,4 @@ exports.run = async (artistName) => {
 };
 
 
-exports.run(process.argv[2] || 'Taylor Swift');
+exports.run(process.argv[2] || 'Taylor Swift', process.argv[3]);

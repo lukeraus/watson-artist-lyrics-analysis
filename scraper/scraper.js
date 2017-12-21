@@ -76,7 +76,7 @@ exports.getAlbums = async (artistName) => {
       if (newUrl === requestOptions.url || split.length === 1) {
         return {
           error: 'ERROR',
-          result: `Artist ${artistName} not found`
+          result: `Artist "${artistName}" not found`
         };
       } else {
         const newOptions = Object.assign({}, requestOptions);
