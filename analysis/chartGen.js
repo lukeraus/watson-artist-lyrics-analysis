@@ -2,20 +2,28 @@ const { JSDOM } = require('jsdom');
 const fs = require('fs');
 const data = require('./artists_results/kanyewest.json');
 
-const baseHtml = '<html><body><script src="https://rawgit.com/gka/d3-jetpack/master/build/d3v4%2Bjetpack.js"></script><div id="container"></div></body></html>';
+// IMPORTANT: update URL if it breaks; it's d3 with the entire d3-jetpack library on top
+const d3WithJetpackUrl = 'https://rawgit.com/gka/d3-jetpack/master/build/d3v4%2Bjetpack.js';
+
+const baseHtml = `<html><body><script src="${d3WithJetpackUrl}"></script><div id="container"></div></body></html>`;
 const dom = new JSDOM(baseHtml, {
 	runScripts: 'dangerously',
 	resources: 'usable',
 	pretendToBeVisual: true
 });
 
-const generateAreaChart = () => {
+setTimeout(generateCharts, 1000);
+
+function generateCharts() {
+	// generateAreaChart();
+	generateHypodermicNeedleChart();
+}
+
+function generateAreaChart() {
 	const d3 = dom.window.d3;
 
 	const albums = data.albums;
 	const titles = [];
-	const traitMapKeys = {};
-	const big5 = [];
 
 	const insights = albums.reduce((insightArray, album) => {
 		const title = album.title;
@@ -30,18 +38,12 @@ const generateAreaChart = () => {
 				parent: 'Big 5'
 			}];
 
-			traitMapKeys[personality.name] = true;
-			big5.push(personality.name);
-
-			const childrensPersonalities = personality.children.map((child) => {
-				traitMapKeys[child.name] = true;
-				return {
-					title,
-					trait: child.name,
-					value: child.percentile,
-					parent: personality.name
-				};
-			});
+			const childrensPersonalities = personality.children.map(child => ({
+				title,
+				trait: child.name,
+				value: child.percentile,
+				parent: personality.name
+			}));
 
 			newPersonalities = newPersonalities.concat(childrensPersonalities);
 			return currentPersonalities.concat(newPersonalities);
@@ -55,8 +57,6 @@ const generateAreaChart = () => {
 		children: insight.children.map(child => child.name)
 	}));
 
-	const traits = Object.keys(traitMapKeys);
-
 	const totalHeight = 120;
 	const totalWidth = 333;
 	const topOffset = 80;
@@ -69,15 +69,15 @@ const generateAreaChart = () => {
 
 	const svg = d3.select('#container').append('svg')
 		.at({
-			height: 7 * totalHeight + topOffset,
-			width: (traits.length / 7) * totalWidth,
+			height: titles.length * totalHeight + topOffset,
+			width: (insights.length / titles.length / 7) * totalWidth,
 			xmlns: 'http://www.w3.org/2000/svg',
 			'xmlns:xlink': 'http://www.w3.org/1999/xlink'
 		});
 
 	const format = d3.format('.0%');
 	const color = d3.scaleOrdinal()
-		.domain(big5)
+		.domain(traitSchema.map(d => d.name))
 		.range(['#8E3C36', '#6EA2D5', '#EB3C27', '#00A28A', '#5F4B8B']);
 
 	const height = totalHeight - margin.top - margin.bottom;
@@ -249,6 +249,264 @@ const generateAreaChart = () => {
 
 	const fileName = `./analysis/svgs/${data.artist.name.toLowerCase().split(' ').join('')}-area-chart.svg`;
 	fs.writeFileSync(fileName, d3.select('#container').html());
-};
+}
 
-setTimeout(generateAreaChart, 1000);
+function generateHypodermicNeedleChart() {
+	const d3 = dom.window.d3;
+
+	const albums = data.albums;
+	const titles = albums.map(album => album.title);
+
+	const traitSchema = albums[0].insights.personality.map(insight => ({
+		name: insight.name,
+		children: insight.children.map(child => child.name)
+	}));
+
+	const traits = [];
+
+	traitSchema.forEach((big5Trait, i) => {
+		let albumScores = albums.map(album => album.insights.personality[i]);
+		addTrait(big5Trait.name, albumScores, true);
+		big5Trait.children.forEach((childTrait, j) => {
+			albumScores = albums.map(album => album.insights.personality[i].children[j]);
+			addTrait(childTrait, albumScores, false);
+		});
+	});
+
+	function addTrait(name, albumScores, big5) {
+		const trait = {
+			name, big5, albumScores
+		};
+
+		const percentiles = albumScores.map(album => album.percentile);
+		percentiles.sort();
+
+		trait.median = d3.median(percentiles);
+		trait.q1 = d3.quantile(percentiles, 0.25);
+		trait.q3 = d3.quantile(percentiles, 0.75);
+
+		const iqr = 1.5 * (trait.q3 - trait.q1);
+		trait.minWhisker = d3.min(percentiles.filter(d => d > trait.q1 - iqr));
+		trait.maxWhisker = d3.max(percentiles.filter(d => d < trait.q3 + iqr));
+
+		traits.push(trait);
+	}
+
+	d3.select('svg').remove();
+
+	const rowHeight = 40;
+	const totalHeight = traits.length * rowHeight;
+	const totalWidth = 1900;
+	const margin = {
+		top: 25,
+		bottom: 25,
+		left: 225,
+		right: 200
+	};
+
+	const height = totalHeight - margin.top - margin.bottom;
+	const width = totalWidth - margin.left - margin.right;
+
+	const labelMargin = 12 - margin.left;
+	const topOffset = 100;
+
+	const svg = d3.select('#container').append('svg')
+		.at({
+			height: totalHeight + topOffset,
+			width: totalWidth,
+			xmlns: 'http://www.w3.org/2000/svg',
+			'xmlns:xlink': 'http://www.w3.org/1999/xlink'
+		});
+
+	const x = d3.scaleLinear()
+		.domain([0, 1])
+		.range([1, width - margin.left]);
+
+	const y = d3.scaleOrdinal()
+		.domain(traits.map(d => d.name))
+		.range(d3.range(1, height, height / traits.length));
+
+	const color = d3.scaleOrdinal()
+		.domain(traitSchema.map(d => d.name))
+		.range(d3.schemeCategory20);
+
+	const g = svg.append('g').at({
+		transform: `translate(${margin.left}, ${margin.top + topOffset})`
+	});
+
+	const xAxisFunc = d3.axisTop(x)
+		.ticks(20)
+		.tickSize(height)
+		.tickFormat(d => Math.floor(d * 100));
+
+	const xAxis = g.append('g.x.axis').at({
+		transform: `translate(0,${height - 20})`
+	}).call(xAxisFunc);
+
+	xAxis.selectAll('.tick line').at({
+		stroke: '#000',
+		opacity: (d, i) => i % 2 === 0 ? 1 : 0.5
+	});
+
+	xAxis.selectAll('.tick text').at({
+		dy: -2
+	});
+
+	const fakeLineData = d3.range(0, height, 3);
+	const yAxis = g.append('g.y.axis').at({
+		transform: 'translate(0,-20)'
+	});
+
+	yAxis.selectAll('line')
+		.data(fakeLineData).enter()
+		.append('line')
+		.at({
+			x1: 0,
+			x2: width,
+			y1: d => d,
+			y2: d => d,
+			strokeWidth: 2,
+			stroke: '#FFF'
+		});
+
+	g.selectAll('.domain').remove();
+
+	const labels = g.append('g').at({
+		class: 'label-container'
+	});
+
+	const lowerRects = g.append('g').at({
+		class: 'lower-rect-container'
+	});
+
+	const upperRects = g.append('g').at({
+		class: 'upper-rect-container'
+	});
+
+	const lowerLines = g.append('g').at({
+		class: 'lower-line-container'
+	});
+
+	const upperLines = g.append('g').at({
+		class: 'upper-line-container'
+	});
+
+	const minWhiskers = g.append('g').at({
+		class: 'min-whisker-container'
+	});
+
+	const maxWhiskers = g.append('g').at({
+		class: 'max-whisker-container'
+	});
+
+	const points = g.append('g').at({
+		class: 'point-container'
+	});
+
+	const boundaries = g.append('g').at({
+		class: 'boundary-container'
+	});
+
+	traits.forEach((trait) => {
+		labels.append('text')
+			.text(trait.name)
+			.at({
+				x: labelMargin,
+				y: y(trait.name) + 4,
+				fontSize: rowHeight / 2.5,
+				fontWeight: trait.big5 ? 800 : 400
+			});
+
+		const yValue = y(trait.median);
+
+		lowerRects.append('rect.boxplot.lower-rect').at({
+			x: x(trait.q1),
+			y: yValue - (rowHeight * 0.25),
+			width: x(trait.median) - x(trait.q1),
+			height: rowHeight / 2,
+			fill: '#E3E3E3',
+			fillOpacity: 0.6,
+			stroke: '#000'
+		});
+
+		upperRects.append('rect.boxplot.upper-rect').at({
+			x: x(trait.median),
+			y: yValue - (rowHeight * 0.25),
+			width: x(trait.q3) - x(trait.median),
+			height: rowHeight / 2,
+			fill: 'none',
+			stroke: '#000'
+		});
+
+		lowerLines.append('line.boxplot.lower-line').at({
+			x1: x(trait.minWhisker),
+			x2: x(trait.q1),
+			y1: yValue,
+			y2: yValue,
+			stroke: '#000'
+		});
+
+		upperLines.append('line.boxplot.upper-line').at({
+			x1: x(trait.q3),
+			x2: x(trait.maxWhisker),
+			y1: yValue,
+			y2: yValue,
+			stroke: '#000'
+		});
+
+		minWhiskers.append('line.boxplot.min-whisker').at({
+			x1: x(trait.minWhisker),
+			x2: x(trait.minWhisker),
+			y1: yValue - (rowHeight * 0.25),
+			y2: yValue + (rowHeight * 0.25),
+			stroke: ('#000')
+		});
+
+		maxWhiskers.append('line.boxplot.max-whisker').at({
+			x1: x(trait.maxWhisker),
+			x2: x(trait.maxWhisker),
+			y1: yValue - (rowHeight * 0.25),
+			y2: yValue + (rowHeight * 0.25),
+			stroke: ('#000')
+		});
+
+		points.selectAll('.point')
+			.data(trait.albumScores).enter()
+			.append('circle')
+			.at({
+				cx: d => x(d.percentile),
+				cy: d => y(d.name),
+				r: rowHeight / 10,
+				fill: (d, i) => color(titles[i]),
+				fillOpacity: 0.4,
+				stroke: (d, i) => color(titles[i]),
+				strokeWidth: rowHeight / 40,
+			});
+
+		if (trait.big5) {
+			boundaries.append('line').at({
+				x1: labelMargin,
+				x2: width - margin.right,
+				y1: yValue - rowHeight / 2,
+				y2: yValue - rowHeight / 2,
+				stroke: '#000'
+			});
+		}
+	});
+
+	d3.select('svg').at({
+		fill: '#000000'
+	});
+
+	d3.selectAll('text').at({
+		fontFamily: 'sans-serif',
+		fill: '#000000'
+	});
+
+	d3.selectAll('.boxplot').at({
+		strokeWidth: 0.5
+	});
+
+	const fileName = `./analysis/svgs/${data.artist.name.toLowerCase().split(' ').join('')}-box-chart.svg`;
+	fs.writeFileSync(fileName, d3.select('#container').html());
+}
