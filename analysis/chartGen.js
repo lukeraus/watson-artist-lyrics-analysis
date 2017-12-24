@@ -1,6 +1,5 @@
 const { JSDOM } = require('jsdom');
 const fs = require('fs');
-const data = require('./artists_results/kanyewest.json');
 
 // IMPORTANT: update URL if it breaks; it's d3 with the entire d3-jetpack library on top
 const d3WithJetpackUrl = 'https://rawgit.com/gka/d3-jetpack/master/build/d3v4%2Bjetpack.js';
@@ -14,8 +13,10 @@ const dom = new JSDOM(baseHtml, {
 
 setTimeout(generateCharts, 1000);
 
+const data = require(process.argv[2]);
+
 function generateCharts() {
-	// generateAreaChart();
+	generateAreaChart();
 	generateHypodermicNeedleChart();
 }
 
@@ -247,7 +248,7 @@ function generateAreaChart() {
 		fill: '#000000'
 	});
 
-	const fileName = `./analysis/svgs/${data.artist.name.toLowerCase().split(' ').join('')}-area-chart.svg`;
+	const fileName = `${data.artist.name.toLowerCase().split(' ').join('')}-area-chart.svg`;
 	fs.writeFileSync(fileName, d3.select('#container').html());
 }
 
@@ -294,14 +295,14 @@ function generateHypodermicNeedleChart() {
 
 	d3.select('svg').remove();
 
-	const rowHeight = 40;
+	const rowHeight = 48;
 	const totalHeight = traits.length * rowHeight;
-	const totalWidth = 1900;
+	const totalWidth = 1600;
 	const margin = {
 		top: 25,
 		bottom: 25,
-		left: 225,
-		right: 200
+		left: rowHeight * 4,
+		right: 25
 	};
 
 	const height = totalHeight - margin.top - margin.bottom;
@@ -320,7 +321,7 @@ function generateHypodermicNeedleChart() {
 
 	const x = d3.scaleLinear()
 		.domain([0, 1])
-		.range([1, width - margin.left]);
+		.range([1, width - margin.right]);
 
 	const y = d3.scaleOrdinal()
 		.domain(traits.map(d => d.name))
@@ -336,11 +337,11 @@ function generateHypodermicNeedleChart() {
 
 	const xAxisFunc = d3.axisTop(x)
 		.ticks(20)
-		.tickSize(height)
+		.tickSize(height + 10)
 		.tickFormat(d => Math.floor(d * 100));
 
 	const xAxis = g.append('g.x.axis').at({
-		transform: `translate(0,${height - 20})`
+		transform: `translate(0,${height - 12})`
 	}).call(xAxisFunc);
 
 	xAxis.selectAll('.tick line').at({
@@ -349,18 +350,17 @@ function generateHypodermicNeedleChart() {
 	});
 
 	xAxis.selectAll('.tick text').at({
-		dy: -2
+		dy: -6
 	});
 
-	const fakeLineData = d3.range(0, height, 3);
+	const fakeLineData = d3.range(0, height + 10, 3);
 	const yAxis = g.append('g.y.axis').at({
 		transform: 'translate(0,-20)'
 	});
 
 	yAxis.selectAll('line')
 		.data(fakeLineData).enter()
-		.append('line')
-		.at({
+		.append('line').at({
 			x1: 0,
 			x2: width,
 			y1: d => d,
@@ -413,7 +413,7 @@ function generateHypodermicNeedleChart() {
 			.at({
 				x: labelMargin,
 				y: y(trait.name) + 4,
-				fontSize: rowHeight / 2.5,
+				fontSize: rowHeight / 3,
 				fontWeight: trait.big5 ? 800 : 400
 			});
 
@@ -478,9 +478,9 @@ function generateHypodermicNeedleChart() {
 				cy: d => y(d.name),
 				r: rowHeight / 10,
 				fill: (d, i) => color(titles[i]),
-				fillOpacity: 0.4,
+				fillOpacity: 0.2,
 				stroke: (d, i) => color(titles[i]),
-				strokeWidth: rowHeight / 40,
+				strokeWidth: rowHeight / 30,
 			});
 
 		if (trait.big5) {
@@ -493,6 +493,64 @@ function generateHypodermicNeedleChart() {
 			});
 		}
 	});
+
+	// legend
+	const legend = svg.append('g').at({
+		class: 'legend',
+		transform: `translate(${margin.left * 2.75},${16})`
+	});
+
+	const halfLength = titles.length / 2;
+	const xLegend = d3.scaleOrdinal()
+		.domain(titles)
+		.range(d3.range(0, width * 1.5, (width * 1.5) / titles.length));
+
+	legend.selectAll('.key')
+		.data(titles).enter()
+		.append('g').at({
+			transform: (d, i) => {
+				const secondRow = i / halfLength > 1;
+				let xValue = xLegend(d);
+				let yValue = 0;
+				if (secondRow) {
+					xValue -= width - 198;
+					yValue += 32;
+				}
+
+				return `translate(${xValue},${yValue})`;
+			}
+		})
+		.append('circle').at({
+			cx: 0,
+			cy: 0,
+			r: rowHeight / 10,
+			fill: d => color(d),
+			fillOpacity: 0.2,
+			stroke: d => color(d),
+			strokeWidth: rowHeight / 30,
+		})
+		.parent().append('text').at({
+			x: rowHeight / 4,
+			y: 6
+		})
+		.text(d => d);
+
+	svg.append('text').at({
+		x: 12,
+		y: 32,
+		fontSize: 36,
+		fontWeight: 800
+	})
+	.text(`${data.artist.name}'s Box Plot`);
+
+	const description = 'Bolded rows are Big 5 traits. Values outside of the whisker bounds are outliers. Values inside the box are between Q1 and Q3, with the value on the line being the median';
+	svg.append('g.description').at({
+		transform: 'translate(12, 52)'
+	}).append('text').at({
+		fontSize: 10,
+		fontStyle: 'italic',
+	})
+	.tspans(d3.wordwrap(description, 80));
 
 	d3.select('svg').at({
 		fill: '#000000'
@@ -507,6 +565,6 @@ function generateHypodermicNeedleChart() {
 		strokeWidth: 0.5
 	});
 
-	const fileName = `./analysis/svgs/${data.artist.name.toLowerCase().split(' ').join('')}-box-chart.svg`;
+	const fileName = `${data.artist.name.toLowerCase().split(' ').join('')}-box-chart.svg`;
 	fs.writeFileSync(fileName, d3.select('#container').html());
 }
