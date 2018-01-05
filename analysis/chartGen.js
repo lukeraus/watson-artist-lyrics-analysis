@@ -86,7 +86,7 @@ function generateAreaChart() {
 
 	const x = d3.scaleOrdinal()
 		.domain(titles)
-		.range(d3.range(1, width, width / 7));
+		.range(d3.range(1, width, width / titles.length));
 
 	const xAxis = d3.axisBottom(x)
 		.tickFormat(d => d.split(' ').map(word => word.slice(0, 1)).join(''));
@@ -113,7 +113,7 @@ function generateAreaChart() {
 		}
 	}
 
-	const chartTitle = `${data.artist.name}'s Personality Changes Through Album Lyrics`;
+	const chartTitle = `${data.artist.metadata.name}'s Personality Changes Through Album Lyrics`;
 	svg.append('text')
 		.text(chartTitle)
 		.at({
@@ -248,7 +248,7 @@ function generateAreaChart() {
 		fill: '#000000'
 	});
 
-	const fileName = `${data.artist.name.toLowerCase().split(' ').join('')}-area-chart.svg`;
+	const fileName = `${data.artist.metadata.name.toLowerCase().split(' ').join('')}-area-chart.svg`;
 	fs.writeFileSync(fileName, d3.select('#container').html());
 }
 
@@ -541,7 +541,7 @@ function generateHypodermicNeedleChart() {
 		fontSize: 36,
 		fontWeight: 800
 	})
-	.text(`${data.artist.name}'s Box Plot`);
+	.text(`${data.artist.metadata.name}'s Box Plot`);
 
 	const description = 'Bolded rows are Big 5 traits. Values outside of the whisker bounds are outliers. Values inside the box are between Q1 and Q3, with the value on the line being the median';
 	svg.append('g.description').at({
@@ -565,6 +565,6 @@ function generateHypodermicNeedleChart() {
 		strokeWidth: 0.5
 	});
 
-	const fileName = `${data.artist.name.toLowerCase().split(' ').join('')}-box-chart.svg`;
+	const fileName = `${data.artist.metadata.name.toLowerCase().split(' ').join('')}-box-chart.svg`;
 	fs.writeFileSync(fileName, d3.select('#container').html());
 }
