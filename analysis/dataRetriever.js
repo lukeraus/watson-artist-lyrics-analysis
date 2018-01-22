@@ -60,7 +60,6 @@ exports.run = async (artistName, spotifyName) => {
 		const albums = await Promise.all(metadataPromises);
 
 		metadataCollector.checkPrecision(albums);
-		console.log(albums.map(album => album.name));
 		console.log('All Spotify album metadata received');
 
 		albums.forEach((album, i) => {
@@ -77,6 +76,8 @@ exports.run = async (artistName, spotifyName) => {
 			const isOnSpotify = albums.some(album => album.originalName === scrapedAlbum.albumTitle);
 			return isOnSpotify;
 		});
+
+		console.log(scrapedAlbums.map(album => album.albumTitle).join(','));
 
 		// Get lyrics from studio albums
 		for (let i = 0; i < scrapedAlbums.length; i++) {
