@@ -1,0 +1,20 @@
+.album {
+  position: absolute;
+  left: 0;
+  height: 400px;
+  width: 100%;
+  background-size: cover;
+  background-position: center; }
+  @media (max-width: 650px) {
+    .album {
+      height: 200px; } }
+  .album .album-text-wrapper {
+    background-color: rgba(0, 0, 0, 0.4);
+    padding: 8px; }
+    .album .album-text-wrapper * {
+      width: 200px; }
+    .album .album-text-wrapper .album-name {
+      font-size: 16px;
+      margin: 0; }
+    .album .album-text-wrapper .release-date {
+      margin: 0; }

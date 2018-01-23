@@ -1,22 +1,26 @@
 @import './utils.scss';
 
-$line-width: 32px;
+$line-width: 16px;
+$percentiles-width: 30%;
+$album-width: 100% - $percentiles-width;
 
-// NOTE: $bounding-width: 650px;
+
+// NOTE: $mobile-width: 650px;
 
 .timeline-base {
 
 	.column {
 		display: inline-block;
 		height: 100%;
-		width: calc(50% - #{$line-width / 2});
-		text-align: center;
+		vertical-align: top;
+		position: relative;
 
-		&.albums {
-			width: calc(33% - #{$line-width / 2});
+		&.percentiles {
+			width: calc(#{$album-width} - #{$line-width / 2});
+			overflow-y: hidden;
 
-			@media (max-width: $bounding-width) {
-				width: 33%;
+			.albums {
+				margin-top: 35px;
 			}
 		}
 
@@ -24,14 +28,24 @@ $line-width: 32px;
 			width: $line-width;
 			background-color: $white;
 			border-radius: 16px;
-
-			@media (max-width: $bounding-width) {
-				width: $line-width / 2;
-			}
 		}
 
-		&.percentiles {
-			width: calc(66% - #{$line-width / 2})
+		&.years {
+			width: calc(#{$percentiles-width} - #{$line-width / 2});
+
+			.year {
+				margin-right: 16px;
+				font-size: 48px;
+				color: $white;
+				position: absolute;
+				font-weight: 600;
+				right: 0;
+
+				@media (max-width: $mobile-width) {
+					font-size: 36px;
+					margin-right: 8px;
+				}
+			}
 		}
 	}
 }

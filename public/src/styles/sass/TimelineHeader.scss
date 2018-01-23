@@ -4,8 +4,8 @@
 	width: 100%;
 	height: 400px;
 
-	@media (max-width: $bounding-width) {
-		height: 600px;
+	@media (max-width: $mobile-width) {
+		height: 550px;
 	}
 
 	> * {
@@ -16,14 +16,13 @@
 		color: $white;
 		font-size: 72px;
 		margin: 0;
-		padding: 32px;
 	}
 
 	.header-image {
 		float: right;
 		width: 400px;
 
-		@media (max-width: $bounding-width) {
+		@media (max-width: $mobile-width) {
 			width: 100%;
 		}
 	}

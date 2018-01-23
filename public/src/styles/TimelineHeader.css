@@ -3,14 +3,13 @@
   height: 400px; }
   @media (max-width: 650px) {
     .header {
-      height: 600px; } }
+      height: 550px; } }
   .header > * {
     display: inline-block; }
   .header .title {
     color: #ffffff;
     font-size: 72px;
-    margin: 0;
-    padding: 32px; }
+    margin: 0; }
   .header .header-image {
     float: right;
     width: 400px; }
