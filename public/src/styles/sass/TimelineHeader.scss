@@ -1,0 +1,30 @@
+@import './utils.scss';
+
+.header {
+	width: 100%;
+	height: 400px;
+
+	@media (max-width: $bounding-width) {
+		height: 600px;
+	}
+
+	> * {
+		display: inline-block;
+	}
+
+	.title {
+		color: $white;
+		font-size: 72px;
+		margin: 0;
+		padding: 32px;
+	}
+
+	.header-image {
+		float: right;
+		width: 400px;
+
+		@media (max-width: $bounding-width) {
+			width: 100%;
+		}
+	}
+}

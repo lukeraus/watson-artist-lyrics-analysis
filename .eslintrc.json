@@ -1,7 +1,8 @@
 {
     "extends": "airbnb",
     "plugins": [
-        "mocha"
+        "mocha",
+        "react"
     ],
     "env": {
         "node": true,
@@ -19,6 +20,11 @@
         "guard-for-in": "off",
         "no-restricted-syntax": "off",
         "no-var": "off",
-        "no-console": "off"
+        "no-console": "off",
+        "react/prefer-stateless-function": 0,
+        "react/jsx-filename-extension": "off",
+        "react/jsx-indent": ["off", "tab"],
+        "react/jsx-indent-props": ["off", "tab"],
+        "react/prop-types": "off"
     }
 }

@@ -1,0 +1,37 @@
+@import './utils.scss';
+
+$line-width: 32px;
+
+// NOTE: $bounding-width: 650px;
+
+.timeline-base {
+
+	.column {
+		display: inline-block;
+		height: 100%;
+		width: calc(50% - #{$line-width / 2});
+		text-align: center;
+
+		&.albums {
+			width: calc(33% - #{$line-width / 2});
+
+			@media (max-width: $bounding-width) {
+				width: 33%;
+			}
+		}
+
+		&.line {
+			width: $line-width;
+			background-color: $white;
+			border-radius: 16px;
+
+			@media (max-width: $bounding-width) {
+				width: $line-width / 2;
+			}
+		}
+
+		&.percentiles {
+			width: calc(66% - #{$line-width / 2})
+		}
+	}
+}

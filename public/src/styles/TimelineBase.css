@@ -1,0 +1,19 @@
+.timeline-base .column {
+  display: inline-block;
+  height: 100%;
+  width: calc(50% - 16px);
+  text-align: center; }
+  .timeline-base .column.albums {
+    width: calc(33% - 16px); }
+    @media (max-width: 650px) {
+      .timeline-base .column.albums {
+        width: 33%; } }
+  .timeline-base .column.line {
+    width: 32px;
+    background-color: #ffffff;
+    border-radius: 16px; }
+    @media (max-width: 650px) {
+      .timeline-base .column.line {
+        width: 16px; } }
+  .timeline-base .column.percentiles {
+    width: calc(66% - 16px); }
