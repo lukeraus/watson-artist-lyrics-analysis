@@ -9,7 +9,10 @@ const getLifeEvents = async (artistMetaData) => {
 
     // create request options, passing response body to cheerio    
     const options = {
-        url: `https://en.wikipedia.org/wiki/${formattedName}`,        
+        url: `https://en.wikipedia.org/wiki/${formattedName}`,  
+        headers: {
+			'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36'
+		},      
         transform: body => cheerio.load(body)
     };
 
@@ -18,8 +21,14 @@ const getLifeEvents = async (artistMetaData) => {
     let lifeEvent = [];    
     try {
         // wait for wikipedia response
-        $ = await rp(options);   
+        $ = await rp(options);
+        console.log($); 
+    } catch(e) {
+        console.log(`Error making request to ${options.url}`)
+        throw e;
     }
 
-    return 'TODO';
+    return  null;
 };
+
+getLifeEvents({artist:{ name: "Kanye West" }});
