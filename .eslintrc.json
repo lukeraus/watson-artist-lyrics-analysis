@@ -1,7 +1,8 @@
 {
     "extends": "airbnb",
     "plugins": [
-        "mocha"
+        "mocha",
+        "react"
     ],
     "env": {
         "node": true,
@@ -17,8 +18,15 @@
         "no-plusplus": "off",
         "no-mixed-operators": "off",
         "guard-for-in": "off",
+        "no-return-assign": "off",
         "no-restricted-syntax": "off",
         "no-var": "off",
-        "no-console": "off"
+        "no-console": "off",
+        "react/prefer-stateless-function": 0,
+        "react/jsx-filename-extension": "off",
+        "react/jsx-indent": ["off", "tab"],
+        "react/jsx-indent-props": ["off", "tab"],
+        "react/prop-types": "off",
+        "import/no-extraneous-dependencies": "off",
     }
 }

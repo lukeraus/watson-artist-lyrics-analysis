@@ -1,0 +1,51 @@
+@import './utils.scss';
+
+$line-width: 16px;
+$percentiles-width: 30%;
+$album-width: 100% - $percentiles-width;
+
+
+// NOTE: $mobile-width: 650px;
+
+.timeline-base {
+
+	.column {
+		display: inline-block;
+		height: 100%;
+		vertical-align: top;
+		position: relative;
+
+		&.percentiles {
+			width: calc(#{$album-width} - #{$line-width / 2});
+			overflow-y: hidden;
+
+			.albums {
+				margin-top: 35px;
+			}
+		}
+
+		&.line {
+			width: $line-width;
+			background-color: $white;
+			border-radius: 16px;
+		}
+
+		&.years {
+			width: calc(#{$percentiles-width} - #{$line-width / 2});
+
+			.year {
+				margin-right: 16px;
+				font-size: 48px;
+				color: $white;
+				position: absolute;
+				font-weight: 600;
+				right: 0;
+
+				@media (max-width: $mobile-width) {
+					font-size: 36px;
+					margin-right: 8px;
+				}
+			}
+		}
+	}
+}

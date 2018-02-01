@@ -1,0 +1,13 @@
+@import './utils.scss';
+
+body {
+  padding: $padding;
+
+  font-family: sans-serif;
+  background: $black;
+  color: $white;
+
+  @media (max-width: $mobile-width) {
+    padding: $padding-mobile;
+  }
+}

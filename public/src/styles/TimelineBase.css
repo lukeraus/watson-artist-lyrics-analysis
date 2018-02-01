@@ -1,0 +1,27 @@
+.timeline-base .column {
+  display: inline-block;
+  height: 100%;
+  vertical-align: top;
+  position: relative; }
+  .timeline-base .column.percentiles {
+    width: calc(70% - 8px);
+    overflow-y: hidden; }
+    .timeline-base .column.percentiles .albums {
+      margin-top: 35px; }
+  .timeline-base .column.line {
+    width: 16px;
+    background-color: #ffffff;
+    border-radius: 16px; }
+  .timeline-base .column.years {
+    width: calc(30% - 8px); }
+    .timeline-base .column.years .year {
+      margin-right: 16px;
+      font-size: 48px;
+      color: #ffffff;
+      position: absolute;
+      font-weight: 600;
+      right: 0; }
+      @media (max-width: 650px) {
+        .timeline-base .column.years .year {
+          font-size: 36px;
+          margin-right: 8px; } }

@@ -1,0 +1,32 @@
+@import './utils.scss';
+
+.album {
+    position: absolute;
+    left: 0;
+    height: 400px;
+    width: 100%;
+	background-size: cover;
+	background-position: center;
+
+	@media (max-width: $mobile-width) {
+		height: 200px;
+	}
+
+	.album-text-wrapper {
+		background-color: rgba(0, 0, 0, 0.4);
+		padding: 8px;
+
+		* {
+			width: $title-width;
+		}
+
+		.album-name {
+			font-size: 16px;
+			margin: 0;
+		}
+
+		.release-date {
+			margin: 0;
+		}
+	}
+}
