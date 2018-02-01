@@ -23,6 +23,7 @@ Each album's lyrics are analyized separately giving us an insight to an artist's
   }
 }
 ```
+
 5. Run `node ./analysis/dataRetriever.js "<artist name>"`
 6. You will find the artist results under `./analysis/artists_results`. Results are formated like this:
 ```
