@@ -1,6 +1,6 @@
 var assert = require('assert');
 var request = require('superagent');
-var scraper = require('../scraper/scraper.js');
+var scraper = require('../analysis/scraper/scraper.js');
 
 describe('Suite one: Mocha Sanity', () => {
     it('should return -1 when the value is not present', () => {
@@ -13,7 +13,7 @@ describe('Suite one: Mocha Sanity', () => {
 
 describe('Suite two: Basic gets', () => {
     it('Get index', (done) => {
-        request.get('http://localhost:6001')
+        request.get('http://localhost:3000')
         .end((err, res) => {
             assert.notEqual(res, undefined, err);
             done();

@@ -1,8 +1,8 @@
 const fs = require('fs');
 
-const scraper = require('../scraper/scraper.js');
+const scraper = require('./scraper/scraper.js');
 const watsonPersonality = require('./watson_personality.js');
-const metadataCollector = require('../scraper/metadataCollector.js');
+const metadataCollector = require('./scraper/metadataCollector.js');
 
 /* run
  * given an artist name, scrape A-Z lyrics for albums
