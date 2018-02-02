@@ -1,24 +1,38 @@
 {
   "name": "watson-artist-lyrics-analysis",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "start": "node app.js",
-    "test": "mocha"
-  },
   "dependencies": {
     "cfenv": "1.0.x",
     "cheerio": "^1.0.0-rc.2",
+    "d3": "^4.12.2",
     "express": "4.15.x",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
+    "node-sass-chokidar": "^0.0.3",
+    "npm-run-all": "^4.1.2",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-scripts": "1.1.0",
     "watson-developer-cloud": "^2.42.0"
   },
   "repository": {},
   "engines": {
     "node": "8.x"
   },
+  "scripts": {
+    "build-css": "node-sass-chokidar --include-path ./src/styles/sass --include-path ./node_modules ./src/styles/sass -o src/styles",
+    "watch-css": "npm run build-css && node-sass-chokidar --include-path ./src/styles/sass --include-path ./node_modules ./src/styles/sass -o src/styles --watch --recursive",
+    "start-js": "react-scripts start",
+    "start": "npm-run-all -p watch-css start-js",
+    "build-js": "react-scripts build",
+    "build": "npm-run-all build-css build-js",
+    "test": "mocha",
+    "test-react": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
   "devDependencies": {
+    "babel-core": "^6.26.0",
     "eslint": "^4.16.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.8.0",
