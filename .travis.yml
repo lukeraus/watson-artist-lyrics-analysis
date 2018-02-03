@@ -1,10 +1,18 @@
 language: node_js
-
 node_js:
-  - "8"
-
+- '8'
 install:
- - npm install
-
+- npm install
 script:
-  - npm start & npm test
+- npm start & npm test
+deploy:
+  password:
+    secure: IVWaBdBoEXuqpJgmImk/tHMymOZg1h60bVAVMEIKu8NSvy3ofT3kSOg9XN9WjBBAsrpvWJOmI8CQPFkUwGcCWG49dvnJys7Y6KXmHhRvsNUAUWefwbNZJ7f1QOj1gT4m5BV2oenZkXaVg3OxOjXJdgsb/DJJM3DhqbHR99rDU0oAl1Xr5s4TdvJG3z/Dxmu9OWDvhLyszlBdPNPImEfzXjurugjj0TAaMOwJQFy1/N3Tt7mQmCAsE8m7LDb3uEKIoPKHFkINR0sHlxKQKJZMZCXGBjyJn8rIP2F9w6irNL8jcQLvADoeLAV58GfqIkJrMWa0o5/0yksENHyGJcC8bZyYL4JxTsiIAL50rmAtcsOqrzjfRyN2SqJm31bAeG/0yEu6ws+YMWRrQuJZZrcKSnHanYdVB8F1OUANv4VfpdmKFfFkQOAKb5+NvnlwkaW9hzNoAAA6U6C9wJSWYFI13j3T27mUuSUyl1K40ZnEpYlJZtryuYz0+UT4vKb1jSMQ/1CO8LY/Dnl4nSvZMHyhYY0sbSjgVb5EC1/coXNvTeAIeeapHvtR+NrqgYYh2fx5+V8djga//WYL7dLoSN5uedcT4wIjk+NE7SAp285zynBZXr70YY1DEtOHJIODCd5lRe9fRYjATHrcWrUk3MIp7aUhqDkhl8s9RWu3TvCT8Ro=
+  provider: cloudfoundry
+  username: analyze.lyrics@gmail.com
+  api: https://api.ng.mybluemix.net
+  organization: analyze.lyrics@gmail.com
+  space: dev
+  on:
+    branch: master
+    
