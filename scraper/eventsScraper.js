@@ -17,13 +17,14 @@ const getLifeEvents = async (artistMetaData) => {
     };
 
     let $;
-    const albumData = ['808s & Heartbreak', 'Yeezus'];
+    // const albumData = ['808s & Heartbreak', 'Yeezus'];
+    const albumData = ['Fearless', '1989']
     const lifeEvent = {};
     try {
         // wait for wikipedia response
         $ = await rp(options);
         for (let i = 0; i < albumData.length; i++) {
-          const formattedAlbum = albumData[i].replace(/ /g, '_');
+          const formattedAlbum = `_${albumData[i].replace(/ /g, '_')}`;
           const sectionName = $('div[id="toc"]').children()
             .find(`a[href *="${formattedAlbum}"]`).children()
             .next()
@@ -48,4 +49,5 @@ const getLifeEvents = async (artistMetaData) => {
     return null;
 };
 
-getLifeEvents({ artist: { name: 'Kanye West' } });
+getLifeEvents({ artist: { name: 'Taylor Swift' } });
+// getLifeEvents({ artist: { name: 'Kanye West' } });
