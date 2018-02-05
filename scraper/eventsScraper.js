@@ -1,11 +1,11 @@
 const rp = require('request-promise');
 const cheerio = require('cheerio');
-const fs = require('fs');
+// const fs = require('fs');
 
 const getLifeEvents = async (artistMetaData) => {
     // format artist name for wikipedia: Kanye West => Kanye_West
-    let artistName = artistMetaData.artist.name;
-    let formattedName = artistName.replace(/ /g, '_');
+    const artistName = artistMetaData.artist.name;
+    const formattedName = artistName.replace(/ /g, '_');
 
     // create request options, passing response body to cheerio
     const options = {
@@ -23,25 +23,24 @@ const getLifeEvents = async (artistMetaData) => {
         // wait for wikipedia response
         $ = await rp(options);
         for (let i = 0; i < albumData.length; i++) {
-          const section = $('a[href="#Career"]').parent().children().next().children()
-          .filter(function () {
-              return $(this).text().trim().indexOf(albumData[i]) !== -1;
-            });
-            const sectionName = section.find('span').eq(1).text();
-            const formattedSectionName = sectionName.replace(/ /g, '_');
-            let albumInfo = $(`span[id="${formattedSectionName}"]`).parent();
-            let lifeEventForAlbum = '';
+          const formattedAlbum = albumData[i].replace(/ /g, '_');
+          const sectionName = $('div[id="toc"]').children()
+            .find(`a[href *="${formattedAlbum}"]`).children()
+            .next()
+            .text();
+          const formattedSectionName = sectionName.replace(/ /g, '_');
+          let albumInfo = $(`span[id="${formattedSectionName}"]`).parent();
+          let lifeEventForAlbum = '';
+          do {
+            if (albumInfo[0].name === 'p') {
+              lifeEventForAlbum += albumInfo.text();
+            }
+            albumInfo = albumInfo.next();
+          } while (albumInfo[0].name !== 'h3');
 
-            do {
-              if (albumInfo[0].name === 'p') {
-                lifeEventForAlbum += albumInfo.text()
-              }
-              albumInfo = albumInfo.next();
-            } while (albumInfo[0].name !== 'h3')
-
-            lifeEvent[albumData[i]] = lifeEventForAlbum;
-          }
-          console.log(lifeEvent);
+          lifeEvent[albumData[i]] = lifeEventForAlbum;
+        }
+        console.log(lifeEvent);
     } catch (e) {
         console.log(`Error making request to ${options.url}`);
         throw e;
