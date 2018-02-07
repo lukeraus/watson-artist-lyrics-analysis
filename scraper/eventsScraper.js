@@ -17,8 +17,8 @@ const getLifeEvents = async (artistMetaData) => {
     };
 
     let $;
-    // const albumData = ['808s & Heartbreak', 'Yeezus'];
-    const albumData = ['Fearless', '1989']
+    const albumData = ['808s & Heartbreak', 'Yeezus'];
+    // const albumData = ['Fearless', '1989']
     const lifeEvent = {};
     try {
         // wait for wikipedia response
@@ -49,5 +49,5 @@ const getLifeEvents = async (artistMetaData) => {
     return null;
 };
 
-getLifeEvents({ artist: { name: 'Taylor Swift' } });
-// getLifeEvents({ artist: { name: 'Kanye West' } });
+// getLifeEvents({ artist: { name: 'Taylor Swift' } });
+ getLifeEvents({ artist: { name: 'Kanye West' } });
