@@ -4,10 +4,10 @@ const cheerio = require('cheerio');
 
 /* TASKS
     1) Find outliers in DataRetriever
-    2) Get album/year for those outliers    
+    2) Get album/year for those outliers
 
     3) Index wikipedia using cheerio to get life-events of relevant album/year
-    4) Call tone analyzer and return results. 
+    4) Call tone analyzer and return results.
     5) (optional) Fine tuning (potentially our own model)
 */
 
@@ -33,6 +33,7 @@ exports.getLifeEvents = async (artistMetaData) => {
     };
 
     let $;
+
     // const albumData = ['808s & Heartbreak', 'Yeezus'];
     const albumData = artistMetaData.albums;
     const lifeEvent = {};
@@ -65,7 +66,6 @@ exports.getLifeEvents = async (artistMetaData) => {
     }
     return null;
 };
-
 
 // getLifeEvents({ artist: { name: 'Taylor Swift' } });
 // getLifeEvents({ artist: { name: 'Kanye West' } });
