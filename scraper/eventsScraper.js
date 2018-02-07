@@ -2,6 +2,15 @@ const rp = require('request-promise');
 const cheerio = require('cheerio');
 // const fs = require('fs');
 
+/* TASKS
+    1) Find outliers in DataRetriever
+    2) Get album/year for those outliers
+
+    3) Index wikipedia using cheerio to get life-events of relevant album/year
+    4) Call tone analyzer and return results.
+    5) (optional) Fine tuning (potentially our own model)
+*/
+
 const getLifeEvents = async (artistMetaData) => {
     // format artist name for wikipedia: Kanye West => Kanye_West
     const artistName = artistMetaData.artist.name;
