@@ -1,4 +1,5 @@
 const fs = require('fs');
+const _ = require('lodash');
 
 const scraper = require('../scraper/scraper.js');
 const watsonPersonality = require('./watson_personality.js');
@@ -105,6 +106,20 @@ exports.run = async (artistName) => {
 	} catch (err) {
 		throw err;
 	}
+};
+
+exports.getOutliers = async (fileName) => {
+    artistResults = {};
+    albumInsights = [];
+    fs.readFile(`./artist_results/${fileName}`, (err, data) => {
+        if (err) throw err;
+            artistResults = JSON.parse(data);
+            artistResults.albums.forEach((album) => {
+                _.pick(album, 'insights.personality.percentile');
+            });
+            
+    });
+
 };
 
 
