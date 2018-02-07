@@ -11,9 +11,16 @@ const cheerio = require('cheerio');
     5) (optional) Fine tuning (potentially our own model)
 */
 
-const getLifeEvents = async (artistMetaData) => {
+/*
+    {
+        "artist": "Taylor Swift",
+        "albums" : ["Fearless", "1989"]
+    }
+*/
+
+exports.getLifeEvents = async (artistMetaData) => {
     // format artist name for wikipedia: Kanye West => Kanye_West
-    const artistName = artistMetaData.artist.name;
+    const artistName = artistMetaData.artist;
     const formattedName = artistName.replace(/ /g, '_');
 
     // create request options, passing response body to cheerio
@@ -27,17 +34,10 @@ const getLifeEvents = async (artistMetaData) => {
 
     let $;
     // const albumData = ['808s & Heartbreak', 'Yeezus'];
-    const albumData = ['Fearless', '1989']
+    const albumData = artistMetaData.albums;
     const lifeEvent = {};
     try {
         // wait for wikipedia response
-<<<<<<< HEAD
-        $ = await rp(options);   
-        // put the predicate     
-        console.log($()); 
-    } catch(e) {
-        console.log(`Error making request to ${options.url}`)
-=======
         $ = await rp(options);
         for (let i = 0; i < albumData.length; i++) {
           const formattedAlbum = `_${albumData[i].replace(/ /g, '_')}`;
@@ -57,18 +57,16 @@ const getLifeEvents = async (artistMetaData) => {
 
           lifeEvent[albumData[i]] = lifeEventForAlbum;
         }
-        console.log(lifeEvent);
+        // console.log(lifeEvent);
+        return lifeEvent;
     } catch (e) {
         console.log(`Error making request to ${options.url}`);
->>>>>>> d6167ba8501606adb91df7bc7d9d3398544be84b
         throw e;
     }
     return null;
 };
 
-<<<<<<< HEAD
-getLifeEvents({artist:{ name: "Kanye West" }, relevantAlbums: ['808s']});
-=======
-getLifeEvents({ artist: { name: 'Taylor Swift' } });
+
+// getLifeEvents({ artist: { name: 'Taylor Swift' } });
 // getLifeEvents({ artist: { name: 'Kanye West' } });
->>>>>>> d6167ba8501606adb91df7bc7d9d3398544be84b
+
