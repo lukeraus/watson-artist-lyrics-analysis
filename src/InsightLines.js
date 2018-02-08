@@ -26,23 +26,27 @@ class InsightLines extends Component {
 			return insights;
 		}, {});
 
-		this.xScale = d3.scaleLinear()
+		this.yScale = d3.scaleLinear()
 			.domain([0, 1])
-			.range([0, 100]);
+			.range([360, 40]);
 
-		this.yScale = this.props.yScale;
+		this.xScale = d3.scaleTime()
+			.domain(this.props.xScale.domain())
+			.range([0, 1000]);
 
 		this.line = d3.line()
-			.x(d => this.xScale(d.percentile))
-			.y(d => this.yScale(d.releaseDate));
+			.x(d => this.xScale(d.releaseDate))
+			.y(d => this.yScale(d.percentile));
 
 		this.color = d3.scaleOrdinal(d3.schemeCategory10);
 	}
 
 	componentDidMount() {
-		const width = this.svg.getBBox().width;
-		this.xScale.range([0, width]);
-		this.forceUpdate();
+	}
+
+	shouldComponentUpdate(props) {
+		this.xScale.range([0, props.rowWidth]);
+		return true;
 	}
 
 	render() {
@@ -61,41 +65,44 @@ class InsightLines extends Component {
 			return currentCircles.concat(insights.map(insight => (
 				<circle
 					className="circle"
-					r="8"
+					r="10"
 					fill="white"
-					strokeWidth="4"
+					strokeWidth="5"
 					key={`${trait}-${insight.album}`}
-					cx={this.xScale(insight.percentile)}
-					cy={this.yScale(insight.releaseDate)}
+					cx={this.xScale(insight.releaseDate)}
+					cy={this.yScale(insight.percentile)}
 					stroke={this.color(trait)}
 				/>
 			)));
 		}, []);
+
+		const [start, stop] = this.yScale.domain();
+		const labels = d3.range(start, stop + 0.01, 0.2).map(value => (
+			<text
+				className="axis-label"
+				x={50}
+				y={this.yScale(value)}
+				key={value}
+			>
+				{Math.floor((value * 100))}
+			</text>
+		));
 		return (
-			<svg
-				preserveAspectRatio="xMaxYMin"
-				ref={svg => {this.svg = svg}}
-				className="insights-svg">
-				<rect className="clear" />
-				<text
-					className="axis start"
-					x="0"
-					y="12">
-					0
-				</text>
-				<text
-					className="axis end"
-					y="12"
-					x={this.xScale.range().pop() - 30}>
-					100
-				</text>
-				<g className="lines">
-					{lines}
-				</g>
-				<g className="circles">
-					{circles}
-				</g>
-			</svg>
+			<div className="svg-wrapper">
+				<svg
+					preserveAspectRatio="xMaxYMin"
+					className="insights-svg"
+				>
+					{labels}
+					<rect className="clear" />
+					<g className="lines">
+						{lines}
+					</g>
+					<g className="circles">
+						{circles}
+					</g>
+				</svg>
+			</div>
 		);
 	}
 }

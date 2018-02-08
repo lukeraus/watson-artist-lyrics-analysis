@@ -2,19 +2,24 @@
   position: absolute;
   left: 0;
   height: 400px;
-  width: 100%;
+  width: 30%;
+  top: -8px;
   background-size: cover;
   background-position: center; }
-  @media (max-width: 650px) {
-    .album {
-      height: 200px; } }
   .album .album-text-wrapper {
-    background-color: rgba(0, 0, 0, 0.4);
-    padding: 8px; }
-    .album .album-text-wrapper * {
-      width: 200px; }
+    background-color: rgba(255, 255, 255, 0.7);
+    color: black;
+    padding: 8px;
+    width: 384px;
+    position: absolute;
+    transform: translate(-177px, 177px) rotate(-90deg);
+    left: 0; }
     .album .album-text-wrapper .album-name {
-      font-size: 16px;
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       margin: 0; }
     .album .album-text-wrapper .release-date {
+      font-size: 12px;
       margin: 0; }

@@ -1,27 +1,55 @@
+.timeline-base .row {
+  width: 100%;
+  position: relative;
+  width: calc(100% - 64px);
+  margin: 0 32px; }
+  .timeline-base .row.albums {
+    overflow-x: hidden;
+    height: 400px; }
+  .timeline-base .row.line {
+    height: 8px;
+    border-radius: 8px;
+    background: #ffffff;
+    width: 100%;
+    margin: 0; }
+  .timeline-base .row.years {
+    height: 24px; }
+    .timeline-base .row.years .year {
+      font-size: 16px;
+      height: 24px;
+      color: #ffffff;
+      position: absolute;
+      font-weight: 600; }
+      .timeline-base .row.years .year .year-text {
+        position: relative;
+        right: 16px; }
+      .timeline-base .row.years .year .year-tick {
+        height: 16px;
+        width: 4px;
+        position: relative;
+        border-radius: 4px;
+        top: -2px;
+        background: white; }
+      @media (max-width: 650px) {
+        .timeline-base .row.years .year {
+          font-size: 12px;
+          margin-right: 4px; } }
+  .timeline-base .row.insights {
+    height: 400px; }
+
 .timeline-base .column {
   display: inline-block;
   height: 100%;
   vertical-align: top;
   position: relative; }
   .timeline-base .column.percentiles {
-    width: calc(70% - 8px);
+    width: calc(70% - 4px);
     overflow-y: hidden; }
     .timeline-base .column.percentiles .albums {
       margin-top: 35px; }
   .timeline-base .column.line {
-    width: 16px;
+    width: 8px;
     background-color: #ffffff;
     border-radius: 16px; }
   .timeline-base .column.years {
-    width: calc(30% - 8px); }
-    .timeline-base .column.years .year {
-      margin-right: 16px;
-      font-size: 48px;
-      color: #ffffff;
-      position: absolute;
-      font-weight: 600;
-      right: 0; }
-      @media (max-width: 650px) {
-        .timeline-base .column.years .year {
-          font-size: 36px;
-          margin-right: 8px; } }
+    width: calc(30% - 4px); }
