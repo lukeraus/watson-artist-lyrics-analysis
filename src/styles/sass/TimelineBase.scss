@@ -16,7 +16,8 @@ $album-width: 100% - $percentiles-width;
 		margin: 0 32px;
 
 		&.albums {
-			margin-top: 8px;
+			overflow-x: hidden;
+			height: 400px;
 		}
 
 		&.line {

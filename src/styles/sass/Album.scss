@@ -1,7 +1,7 @@
 @import './utils.scss';
 
 $album-height: 400px;
-$album-text-padding: 16px;
+$album-text-padding: 8px;
 
 .album {
     position: absolute;
@@ -13,16 +13,16 @@ $album-text-padding: 16px;
 	background-position: center;
 
 	.album-text-wrapper {
-		background-color: rgba(255, 255, 255, 0.8);
+		background-color: rgba(255, 255, 255, 0.7);
 		color: black;
 		padding: $album-text-padding;
 		width: $album-height - (2 * $album-text-padding);
 		position: absolute;
-		transform: translate(-166px, 166px) rotate(-90deg);
+		transform: translate(-177px, 177px) rotate(-90deg);
 		left: 0;
 
 		.album-name {
-			font-size: 16px;
+			font-size: 14px;
 			white-space: nowrap;
 			overflow: hidden;
 			text-overflow: ellipsis;
@@ -30,6 +30,7 @@ $album-text-padding: 16px;
 		}
 
 		.release-date {
+			font-size: 12px;
 			margin: 0;
 		}
 	}

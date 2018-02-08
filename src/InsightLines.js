@@ -28,7 +28,7 @@ class InsightLines extends Component {
 
 		this.yScale = d3.scaleLinear()
 			.domain([0, 1])
-			.range([0, 400]);
+			.range([360, 40]);
 
 		this.xScale = d3.scaleTime()
 			.domain(this.props.xScale.domain())
@@ -65,9 +65,9 @@ class InsightLines extends Component {
 			return currentCircles.concat(insights.map(insight => (
 				<circle
 					className="circle"
-					r="8"
+					r="10"
 					fill="white"
-					strokeWidth="4"
+					strokeWidth="5"
 					key={`${trait}-${insight.album}`}
 					cx={this.xScale(insight.releaseDate)}
 					cy={this.yScale(insight.percentile)}
@@ -75,12 +75,25 @@ class InsightLines extends Component {
 				/>
 			)));
 		}, []);
+
+		const [start, stop] = this.yScale.domain();
+		const labels = d3.range(start, stop + 0.01, 0.2).map(value => (
+			<text
+				className="axis-label"
+				x={50}
+				y={this.yScale(value)}
+				key={value}
+			>
+				{Math.floor((value * 100))}
+			</text>
+		));
 		return (
 			<div className="svg-wrapper">
 				<svg
 					preserveAspectRatio="xMaxYMin"
 					className="insights-svg"
 				>
+					{labels}
 					<rect className="clear" />
 					<g className="lines">
 						{lines}

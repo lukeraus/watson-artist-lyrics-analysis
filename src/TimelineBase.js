@@ -11,7 +11,23 @@ class TimelineBase extends Component {
 		this.heightPerAlbum = 200;
 		this.height = this.props.albums.length * this.heightPerAlbum;
 
-		this.dateConverter = d3.timeParse('%Y-%m-%d');
+		const conversions = {
+			day: d3.timeParse('%Y-%m-%d'),
+			month: d3.timeParse('%Y-%m'),
+			year: d3.timeParse('%Y')
+		};
+
+		this.dateConverter = (date) => {
+			let converter = conversions.day;
+			if (date.length > 7) {
+				converter = conversions.day;
+			} else if (date.length > 4) {
+				converter = conversions.month;
+			} else {
+				converter = conversions.year;
+			}
+			return converter(date);
+		};
 
 		const dates = this.props.albums.map(album => this.dateConverter(album.metadata.release_date));
 		console.log(dates);

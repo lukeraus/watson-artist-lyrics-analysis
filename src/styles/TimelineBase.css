@@ -4,7 +4,8 @@
   width: calc(100% - 64px);
   margin: 0 32px; }
   .timeline-base .row.albums {
-    margin-top: 8px; }
+    overflow-x: hidden;
+    height: 400px; }
   .timeline-base .row.line {
     height: 8px;
     border-radius: 8px;
