@@ -1,9 +1,9 @@
 var ToneAnalyzerV3 = require('watson-developer-cloud/tone-analyzer/v3');
-var eventScraper = require('../scraper/eventsScraper'); 
+var eventScraper = require('../scraper/eventsScraper.js');
 
 var tone_analyzer = new ToneAnalyzerV3({
-  username: '<USERNAME>',
-  password: '<PASS>',
+  username: '60b9c033-b301-40c4-8cb1-0244cbdf5380',
+  password: 'NxgCaMufw5Zk',
   version_date: '2016-05-19'
 });
 

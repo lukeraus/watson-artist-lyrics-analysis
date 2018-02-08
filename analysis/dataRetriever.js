@@ -4,6 +4,7 @@ const _ = require('lodash');
 const scraper = require('../scraper/scraper.js');
 const watsonPersonality = require('./watson_personality.js');
 const metadataCollector = require('../scraper/metadataCollector.js');
+const outlierDetector = require('./outlierDetector.js');
 
 /* run
  * given an artist name, scrape A-Z lyrics for albums

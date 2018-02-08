@@ -1,26 +1,24 @@
 const rp = require('request-promise');
 const cheerio = require('cheerio');
-// const fs = require('fs');
 
-/* TASKS
-    1) Find outliers in DataRetriever
-    2) Get album/year for those outliers
-
-    3) Index wikipedia using cheerio to get life-events of relevant album/year
-    4) Call tone analyzer and return results.
-    5) (optional) Fine tuning (potentially our own model)
+/** 
+ *  Given data containing the name of an artist along with
+ *  a list outlier albums, index into wikipedia webpage to 
+ *  extract relevant text containing those life periods. 
+ * 
+ *  artistOutlierData has the following schema 
+ *   {
+ *       "artist": "Taylor Swift",
+ *       "albums" : ["Fearless", "1989"]
+ *   }
+ * 
+ *  returns a dictionary that maps representing {album, lifeEvent} pair, i.e.
+ *  each album is a key and the value is wiki text about the artist's life during
+ *  the time of the album.
 */
-
-/*
-    {
-        "artist": "Taylor Swift",
-        "albums" : ["Fearless", "1989"]
-    }
-*/
-
-exports.getLifeEvents = async (artistMetaData) => {
+module.exports = exports = getLifeEvents = async (artistOutlierData) => {
     // format artist name for wikipedia: Kanye West => Kanye_West
-    const artistName = artistMetaData.artist;
+    const artistName = artistOutlierData.artist;
     const formattedName = artistName.replace(/ /g, '_');
 
     // create request options, passing response body to cheerio
@@ -32,10 +30,8 @@ exports.getLifeEvents = async (artistMetaData) => {
         transform: body => cheerio.load(body)
     };
 
-    let $;
-
-    // const albumData = ['808s & Heartbreak', 'Yeezus'];
-    const albumData = artistMetaData.albums;
+    let $;    
+    const albumData = artistOutlierData.albums;
     const lifeEvent = {};
     try {
         // wait for wikipedia response
@@ -57,8 +53,7 @@ exports.getLifeEvents = async (artistMetaData) => {
           } while (albumInfo[0].name !== 'h3');
 
           lifeEvent[albumData[i]] = lifeEventForAlbum;
-        }
-        // console.log(lifeEvent);
+        }        
         return lifeEvent;
     } catch (e) {
         console.log(`Error making request to ${options.url}`);
