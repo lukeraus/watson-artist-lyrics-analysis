@@ -1,27 +1,31 @@
 @import './utils.scss';
 
+$album-height: 400px;
+$album-text-padding: 16px;
+
 .album {
     position: absolute;
     left: 0;
-    height: 400px;
-    width: 100%;
+    height: $album-height;
+	width: 30%;
+	top: -8px;
 	background-size: cover;
 	background-position: center;
 
-	@media (max-width: $mobile-width) {
-		height: 200px;
-	}
-
 	.album-text-wrapper {
-		background-color: rgba(0, 0, 0, 0.4);
-		padding: 8px;
-
-		* {
-			width: $title-width;
-		}
+		background-color: rgba(255, 255, 255, 0.8);
+		color: black;
+		padding: $album-text-padding;
+		width: $album-height - (2 * $album-text-padding);
+		position: absolute;
+		transform: translate(-166px, 166px) rotate(-90deg);
+		left: 0;
 
 		.album-name {
 			font-size: 16px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
 			margin: 0;
 		}
 

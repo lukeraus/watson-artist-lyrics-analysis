@@ -1,22 +1,24 @@
-.insights-svg {
-  width: calc(100% - 200px);
-  height: 100%;
-  float: right;
-  position: relative;
-  z-index: 10;
-  bottom: 10px; }
-  @media (max-width: 650px) {
-    .insights-svg {
-      width: 100%; } }
-  .insights-svg .clear {
+.svg-wrapper {
+  height: 100%; }
+  .svg-wrapper .insights-svg {
     width: 100%;
     height: 100%;
-    stroke: none;
-    fill: none; }
-  .insights-svg .axis {
-    fill: white; }
-  .insights-svg .line {
-    stroke-width: 6px;
-    fill: none; }
-  .insights-svg .circle {
-    fill: #ffffff; }
+    float: right;
+    position: relative;
+    z-index: 10;
+    bottom: 10px; }
+    @media (max-width: 650px) {
+      .svg-wrapper .insights-svg {
+        width: 100%; } }
+    .svg-wrapper .insights-svg .clear {
+      width: 100%;
+      height: 100%;
+      stroke: none;
+      fill: none; }
+    .svg-wrapper .insights-svg .axis {
+      fill: white; }
+    .svg-wrapper .insights-svg .line {
+      stroke-width: 6px;
+      fill: none; }
+    .svg-wrapper .insights-svg .circle {
+      fill: #ffffff; }

@@ -1,4 +1,5 @@
 {
+    "parser": "babel-eslint",
     "extends": "airbnb",
     "plugins": [
         "mocha",
@@ -27,6 +28,6 @@
         "react/jsx-indent": ["off", "tab"],
         "react/jsx-indent-props": ["off", "tab"],
         "react/prop-types": "off",
-        "import/no-extraneous-dependencies": "off",
+        "import/no-extraneous-dependencies": "off"
     }
 }

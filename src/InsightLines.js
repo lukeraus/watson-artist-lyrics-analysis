@@ -26,23 +26,27 @@ class InsightLines extends Component {
 			return insights;
 		}, {});
 
-		this.xScale = d3.scaleLinear()
+		this.yScale = d3.scaleLinear()
 			.domain([0, 1])
-			.range([0, 100]);
+			.range([0, 400]);
 
-		this.yScale = this.props.yScale;
+		this.xScale = d3.scaleTime()
+			.domain(this.props.xScale.domain())
+			.range([0, 1000]);
 
 		this.line = d3.line()
-			.x(d => this.xScale(d.percentile))
-			.y(d => this.yScale(d.releaseDate));
+			.x(d => this.xScale(d.releaseDate))
+			.y(d => this.yScale(d.percentile));
 
 		this.color = d3.scaleOrdinal(d3.schemeCategory10);
 	}
 
 	componentDidMount() {
-		const width = this.svg.getBBox().width;
-		this.xScale.range([0, width]);
-		this.forceUpdate();
+	}
+
+	shouldComponentUpdate(props) {
+		this.xScale.range([0, props.rowWidth]);
+		return true;
 	}
 
 	render() {
@@ -65,37 +69,27 @@ class InsightLines extends Component {
 					fill="white"
 					strokeWidth="4"
 					key={`${trait}-${insight.album}`}
-					cx={this.xScale(insight.percentile)}
-					cy={this.yScale(insight.releaseDate)}
+					cx={this.xScale(insight.releaseDate)}
+					cy={this.yScale(insight.percentile)}
 					stroke={this.color(trait)}
 				/>
 			)));
 		}, []);
 		return (
-			<svg
-				preserveAspectRatio="xMaxYMin"
-				ref={svg => {this.svg = svg}}
-				className="insights-svg">
-				<rect className="clear" />
-				<text
-					className="axis start"
-					x="0"
-					y="12">
-					0
-				</text>
-				<text
-					className="axis end"
-					y="12"
-					x={this.xScale.range().pop() - 30}>
-					100
-				</text>
-				<g className="lines">
-					{lines}
-				</g>
-				<g className="circles">
-					{circles}
-				</g>
-			</svg>
+			<div className="svg-wrapper">
+				<svg
+					preserveAspectRatio="xMaxYMin"
+					className="insights-svg"
+				>
+					<rect className="clear" />
+					<g className="lines">
+						{lines}
+					</g>
+					<g className="circles">
+						{circles}
+					</g>
+				</svg>
+			</div>
 		);
 	}
 }
