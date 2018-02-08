@@ -109,19 +109,5 @@ exports.run = async (artistName) => {
 	}
 };
 
-exports.getOutliers = async (fileName) => {
-    artistResults = {};
-    albumInsights = [];
-    fs.readFile(`./artist_results/${fileName}`, (err, data) => {
-        if (err) throw err;
-            artistResults = JSON.parse(data);
-            artistResults.albums.forEach((album) => {
-                _.pick(album, 'insights.personality.percentile');
-            });
-            
-    });
-
-};
-
 
 exports.run(process.argv[2] || 'Taylor Swift');
