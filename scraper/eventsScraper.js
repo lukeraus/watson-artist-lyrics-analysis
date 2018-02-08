@@ -16,7 +16,7 @@ const cheerio = require('cheerio');
  *  each album is a key and the value is wiki text about the artist's life during
  *  the time of the album.
 */
-module.exports = exports = getLifeEvents = async (artistOutlierData) => {
+exports.getLifeEvents = async (artistOutlierData) => {
     // format artist name for wikipedia: Kanye West => Kanye_West
     const artistName = artistOutlierData.artist;
     const formattedName = artistName.replace(/ /g, '_');
