@@ -11,7 +11,6 @@ class App extends Component {
     super(props);
 
     this.data = KanyeData;
-    console.log(this.data);
   }
 
   render() {
