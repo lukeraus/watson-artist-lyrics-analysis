@@ -18,7 +18,7 @@ const cheerio = require('cheerio');
 */
 exports.getLifeEvents = async (artistOutlierData) => {
     // format artist name for wikipedia: Kanye West => Kanye_West
-    const artistName = artistOutlierData.artist;
+    const artistName = artistOutlierData.artist;    
     const formattedName = artistName.replace(/ /g, '_');
 
     // create request options, passing response body to cheerio
@@ -38,6 +38,7 @@ exports.getLifeEvents = async (artistOutlierData) => {
         $ = await rp(options);
         for (let i = 0; i < albumData.length; i++) {
           const formattedAlbum = `_${albumData[i].replace(/ /g, '_')}`;
+          console.log('Okay');
           const sectionName = $('div[id="toc"]').children()
             .find(`a[href *="${formattedAlbum}"]`).children()
             .next()
@@ -62,6 +63,5 @@ exports.getLifeEvents = async (artistOutlierData) => {
     return null;
 };
 
-// getLifeEvents({ artist: { name: 'Taylor Swift' } });
-// getLifeEvents({ artist: { name: 'Kanye West' } });
+
 
