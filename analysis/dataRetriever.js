@@ -9,9 +9,9 @@ const eventsScraper = require('../scraper/eventsScraper.js');
 const toneAnalyzer = require('./toneAnalyzer');
 
 
-const getLifeEventsData = async (artistName) => {    
-    const outlierAlbums = await outlierDetector.getOutliers(artistName);        
-    const wikiMap = await eventsScraper.getLifeEvents({'artist': artistName, 'albums': outlierAlbums});      
+const getLifeEventsData = async (artistName) => {
+    const outlierAlbums = await outlierDetector.getOutliers(artistName);
+    const wikiMap = await eventsScraper.getLifeEvents({'artist': artistName, 'albums': outlierAlbums});
     return await toneAnalyzer.getToneEvents(wikiMap, artistName);
 };
 

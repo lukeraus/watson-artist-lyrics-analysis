@@ -38,7 +38,6 @@ exports.getLifeEvents = async (artistOutlierData) => {
         $ = await rp(options);
         for (let i = 0; i < albumData.length; i++) {
           const formattedAlbum = `_${albumData[i].replace(/ /g, '_')}`;
-          console.log('Okay');
           const sectionName = $('div[id="toc"]').children()
             .find(`a[href *="${formattedAlbum}"]`).children()
             .next()
@@ -60,5 +59,4 @@ exports.getLifeEvents = async (artistOutlierData) => {
         console.log(`Error making request to ${options.url}`);
         throw e;
     }
-    return null;
 };
