@@ -5,6 +5,17 @@ const scraper = require('../scraper/scraper.js');
 const watsonPersonality = require('./watson_personality.js');
 const metadataCollector = require('../scraper/metadataCollector.js');
 const outlierDetector = require('./outlierDetector.js');
+const eventsScraper = require('../scraper/eventsScraper.js');
+const toneAnalyzer = require('./toneAnalyzer');
+
+
+const getLifeEventsData = async (artistName) => {    
+    const outlierAlbums = await outlierDetector.getOutliers(artistName);        
+    const wikiMap = await eventsScraper.getLifeEvents({'artist': artistName, 'albums': outlierAlbums});      
+    return await toneAnalyzer.getToneEvents(wikiMap, artistName);
+};
+
+getLifeEventsData('Kanye West');
 
 /* run
  * given an artist name, scrape A-Z lyrics for albums
@@ -110,4 +121,4 @@ exports.run = async (artistName) => {
 };
 
 
-exports.run(process.argv[2] || 'Taylor Swift');
+// exports.run(process.argv[2] || 'Taylor Swift');
