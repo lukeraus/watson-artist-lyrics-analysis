@@ -1,9 +1,0 @@
-body {
-  padding: 64px;
-  margin: 0;
-  font-family: sans-serif;
-  background: #000000;
-  color: #ffffff; }
-  @media (max-width: 650px) {
-    body {
-      padding: 16px; } }

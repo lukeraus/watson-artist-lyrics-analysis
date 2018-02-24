@@ -2,13 +2,16 @@
 
 .wip-page {
 	height: calc(100vh - #{$nav-height});
-	background: $black;
+	// background: $black;
 	display: flex;
-	color: $white;
+	// color: $white;
 
 	.content {
 		margin: auto;
 		width: 432px;
+
+		position: relative;
+		bottom: $nav-height;
 
 		> * {
 			margin-left: auto;
@@ -18,7 +21,7 @@
 
 		.gif {
 			width: 256px;
-
+			filter: invert(1);
 		}
 
 		.loading-description {
@@ -39,7 +42,7 @@
 		}
 
 		.submit-email {
-			width: 245px;
+			width: 253px;
 			position: relative;
 			top: -18px;
 
@@ -51,20 +54,28 @@
 				height: 32px;
 				width: 196px;
 
-				border: none;
+				// border: none;
+				border: 1px solid $black;
+				border-right: none;
+
 				font-size: 18px;
 				padding-left: 14px;
 				line-height: 18;
 			}
 
 			.submit-button {
-				display: inline-block;
-				height: 34px;
-				line-height: 34px;
-				width: 34px;
-				text-align: center;
+				height: 36px;
+				line-height: 32px;
+				width: 36px;
+
 				vertical-align: bottom;
+				cursor: pointer;
+
 				background-color: #5292ff;
+				color: $white;
+
+				text-align: center;
+				font-size: 30px;
 			}
 		}
 

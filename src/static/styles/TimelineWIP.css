@@ -1,17 +1,18 @@
 .wip-page {
   height: calc(100vh - 64px);
-  background: #000000;
-  display: flex;
-  color: #ffffff; }
+  display: flex; }
   .wip-page .content {
     margin: auto;
-    width: 432px; }
+    width: 432px;
+    position: relative;
+    bottom: 64px; }
     .wip-page .content > * {
       margin-left: auto;
       margin-right: auto;
       display: block; }
     .wip-page .content .gif {
-      width: 256px; }
+      width: 256px;
+      filter: invert(1); }
     .wip-page .content .loading-description {
       position: relative;
       top: -32px;
@@ -24,7 +25,7 @@
         margin: 0;
         font-size: 24px; }
     .wip-page .content .submit-email {
-      width: 245px;
+      width: 253px;
       position: relative;
       top: -18px; }
       .wip-page .content .submit-email > * {
@@ -32,18 +33,21 @@
       .wip-page .content .submit-email .input-email {
         height: 32px;
         width: 196px;
-        border: none;
+        border: 1px solid #000000;
+        border-right: none;
         font-size: 18px;
         padding-left: 14px;
         line-height: 18; }
       .wip-page .content .submit-email .submit-button {
-        display: inline-block;
-        height: 34px;
-        line-height: 34px;
-        width: 34px;
-        text-align: center;
+        height: 36px;
+        line-height: 32px;
+        width: 36px;
         vertical-align: bottom;
-        background-color: #5292ff; }
+        cursor: pointer;
+        background-color: #5292ff;
+        color: #ffffff;
+        text-align: center;
+        font-size: 30px; }
     @media (max-width: 650px) {
       .wip-page .content {
         width: 300px; }
