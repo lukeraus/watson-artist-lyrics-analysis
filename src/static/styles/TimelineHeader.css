@@ -7,12 +7,12 @@
   .header > * {
     display: inline-block; }
   .header .title {
-    color: #ffffff;
     font-size: 72px;
     margin: 0; }
   .header .header-image {
     float: right;
-    width: 400px; }
+    width: 400px;
+    border-radius: 50%; }
     @media (max-width: 650px) {
       .header .header-image {
         width: 100%; } }

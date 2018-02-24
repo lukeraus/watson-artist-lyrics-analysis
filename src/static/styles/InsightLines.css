@@ -6,8 +6,6 @@
     position: relative;
     z-index: 10;
     bottom: 10px; }
-    .svg-wrapper .insights-svg text {
-      fill: white; }
     .svg-wrapper .insights-svg .clear {
       width: 100%;
       height: 100%;
@@ -18,5 +16,3 @@
     .svg-wrapper .insights-svg .line {
       stroke-width: 4px;
       fill: none; }
-    .svg-wrapper .insights-svg .circle {
-      fill: #ffffff; }

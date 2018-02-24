@@ -7,13 +7,14 @@
     "cheerio": "^1.0.0-rc.2",
     "d3": "^4.12.2",
     "express": "4.15.x",
-    "request": "^2.83.0",
-    "request-promise": "^4.2.2",
     "node-sass-chokidar": "^0.0.3",
     "npm-run-all": "^4.1.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "react-router-dom": "^4.2.2",
     "react-scripts": "1.1.0",
+    "request": "^2.83.0",
+    "request-promise": "^4.2.2",
     "watson-developer-cloud": "^2.42.0"
   },
   "repository": {},
@@ -21,8 +22,8 @@
     "node": "8.x"
   },
   "scripts": {
-    "build-css": "node-sass-chokidar --include-path ./src/styles/sass --include-path ./node_modules ./src/styles/sass -o src/styles",
-    "watch-css": "npm run build-css && node-sass-chokidar --include-path ./src/styles/sass --include-path ./node_modules ./src/styles/sass -o src/styles --watch --recursive",
+    "build-css": "node-sass-chokidar --include-path ./src/static/styles/sass --include-path ./node_modules ./src/static/styles/sass -o src/static/styles",
+    "watch-css": "npm run build-css && node-sass-chokidar --include-path ./src/static/styles/sass --include-path ./node_modules ./src/static/styles/sass -o src/static/styles --watch --recursive",
     "start-js": "react-scripts start",
     "start": "npm-run-all -p watch-css start-js",
     "build-js": "react-scripts build",

@@ -13,8 +13,10 @@ $album-text-padding: 8px;
 	background-position: center;
 
 	.album-text-wrapper {
-		background-color: rgba(255, 255, 255, 0.7);
-		color: black;
+		// background-color: rgba(255, 255, 255, 0.7);
+		background-color: rgba(0, 0, 0, 0.4);
+		// color: black;
+		color: $white;
 		padding: $album-text-padding;
 		width: $album-height - (2 * $album-text-padding);
 		position: absolute;

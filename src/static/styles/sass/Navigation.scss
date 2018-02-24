@@ -1,0 +1,35 @@
+@import './utils.scss';
+
+.nav {
+	height: $nav-height;
+	background: #5392ff;
+
+	.nav-button {
+		display: inline-block;
+		height: 100%;
+
+		font-size: 24px;
+		text-decoration: none;
+		color: $white;
+
+		border: none;
+		background: none;
+		border-right: 1px solid $white;
+
+		&:not(:first-child) {
+			border-left: 1px solid $white;
+		}
+
+		&:hover, &:focus {
+			background: #2d74da;
+			cursor: pointer;
+		}
+
+		.nav-button-content {
+			width: 64px;
+			height: 34px;
+			padding: 12px;
+			margin-top: 6px;
+		}
+	}
+}
