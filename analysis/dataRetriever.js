@@ -108,4 +108,4 @@ exports.run = async (artistName) => {
 };
 
 
-exports.run(process.argv[2] || 'Taylor Swift');
+// exports.run(process.argv[2] || 'Taylor Swift');
