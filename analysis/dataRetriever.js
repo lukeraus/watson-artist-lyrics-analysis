@@ -97,15 +97,16 @@ exports.run = async (artistName) => {
 		});
 		console.log('Personality Insights received');
 
-		const fileName = `./analysis/artists_results/${artistName.toLowerCase().split(' ').join('')}.json`;
-		fs.writeFileSync(fileName, JSON.stringify(resultJson, null, 4));
-
-		// And we oooout
+		// const fileName = `./analysis/artists_results/${artistName.toLowerCase().split(' ').join('')}.json`;
+    	// fs.writeFileSync(fileName, JSON.stringify(resultJson, null, 4));
+    
+    	// And we oooout
 		console.log('DONE');
+    	return resultJson;
 	} catch (err) {
 		throw err;
 	}
 };
 
 
-exports.run(process.argv[2] || 'Taylor Swift');
+// exports.run(process.argv[2] || 'Taylor Swift');
