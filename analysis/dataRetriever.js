@@ -98,11 +98,11 @@ exports.run = async (artistName) => {
 		console.log('Personality Insights received');
 
 		// const fileName = `./analysis/artists_results/${artistName.toLowerCase().split(' ').join('')}.json`;
-    // fs.writeFileSync(fileName, JSON.stringify(resultJson, null, 4));
+    	// fs.writeFileSync(fileName, JSON.stringify(resultJson, null, 4));
     
-    // And we oooout
+    	// And we oooout
 		console.log('DONE');
-    return resultJson;		
+    	return resultJson;
 	} catch (err) {
 		throw err;
 	}
