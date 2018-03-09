@@ -8,6 +8,7 @@
     "cheerio": "^1.0.0-rc.2",
     "d3": "^4.12.2",
     "express": "4.15.x",
+    "mongodb": "^3.0.4",
     "node-sass-chokidar": "^0.0.3",
     "nodemailer": "^4.4.2",
     "npm-run-all": "^4.1.2",
