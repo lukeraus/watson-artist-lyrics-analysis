@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const dataRetriever = require('./analysis/dataRetriever.js');
-const emailClient = require('./analysis/emailClient.js');
+const dataRetriever = require('../analysis/dataRetriever.js');
+const emailClient = require('./emailClient.js');
 
 const app = express();
 const port = process.env.PORT || 5000;
