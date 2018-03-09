@@ -9,6 +9,7 @@ const dbUrl = 'mongodb://localhost/spacejam';
 
 /* start the server after we connect to database */
 MongoClient.connect(dbUrl, (err, client) => {
+
   if (err) throw err;
   console.log('Created spacejam database');
   db = client.db('spacejam');
@@ -32,72 +33,72 @@ MongoClient.connect(dbUrl, (err, client) => {
   // POST method routes
   app.post('/search', function (req, res) {
 
-  // Set boilerplate response
-  res.setHeader('Content-Type', 'application/json');
-  let jsonResponse = {
-    type: 'DEFAULT',
-    message: 'None'
-  };
+    // Set boilerplate response
+    res.setHeader('Content-Type', 'application/json');
+    let jsonResponse = {
+      type: 'DEFAULT',
+      message: 'None'
+    };
 
-  console.log('Entering search....');
-  console.log('Request: ' + JSON.stringify(req.body));
+    console.log('Entering search....');
+    console.log('Request: ' + JSON.stringify(req.body));
 
-  // No data given
-  if (!req.body || !req.body.search) {
-    res.status(400);
-    jsonResponse.type = 'BAD_REQUEST';
-    jsonResponse.message = 'Bad data give. Must be JSON formatad as: {\'search\':\'Artist Name\'}';
-    res.send(JSON.stringify(jsonResponse, null, 3));
-    return;
-  }
+    // No data given
+    if (!req.body || !req.body.search) {
+      res.status(400);
+      jsonResponse.type = 'BAD_REQUEST';
+      jsonResponse.message = 'Bad data give. Must be JSON formatad as: {\'search\':\'Artist Name\'}';
+      res.send(JSON.stringify(jsonResponse, null, 3));
+      return;
+    }
  
 
-  // Search spotify to see if artist exists  
-  let searchTerm = req.body.search;    
-  const query = { "artist.name": searchTerm };
-  const storedArtist = db.collection('artistResults')
-    .findOne(query, (err, storedArtist) => {
-      console.log(`stored artist: ${storedArtist}`);
+    // Search DB to see if artist exists
+    let searchTerm = req.body.search;
+    const query = { "artist.name": searchTerm };
+    const storedArtist = db.collection('artistResults')
+      .findOne(query, (err, storedArtist) => {
+        console.log(`stored artist: ${storedArtist}`);
 
-      // For DB error
-      if (err) {
-        res.status(500);
-        jsonResponse.type = 'SERVER_ERROR';
-        jsonResponse.message = 'Server error'
-        res.send(JSON.stringify(jsonResponse, null, 3));
-      }
+        // For DB error
+        if (err) {
+          res.status(500);
+          jsonResponse.type = 'SERVER_ERROR';
+          jsonResponse.message = 'Server error'
+          res.send(JSON.stringify(jsonResponse, null, 3));
+        }
 
-      // if not in DB, look on spotify
-      if (!storedArtist) {        
-        console.log('artist not found in db');
-        console.log('Searching spotify for: ' + searchTerm);
-        spotifySearch.search(searchTerm).then(function(found) {
-          if (found) {
+        // if not in DB, look on spotify
+        if (!storedArtist) {
+          console.log('artist not found in db');
+          console.log('Searching spotify for: ' + searchTerm);
+          spotifySearch.search(searchTerm).then(function(found) {
+            if (found) {
+              res.status(200);
+              jsonResponse.type = 'ARTIST_FOUND_NO_WATSON';
+              jsonResponse.message = 'Found artist ' + searchTerm +
+                ' on spotify, but Watson has not analyzed their lyrics.' +
+                ' Please enter your email and we will let you know when we have that artist.';
+              res.send(JSON.stringify(jsonResponse, null, 3));
+            } else {
+              res.status(404);
+              jsonResponse.type = 'ARTIST_NOT_FOUND';
+              jsonResponse.message = 'Could not find: ' + searchTerm + ' on spotify. Please try again';
+              res.send(JSON.stringify(jsonResponse, null, 3));
+            }
+          });
+        } else {
+          // Send back artist result if found in DB
+          delete storedArtist._id;
+          console.log(`Stored Artists: ${JSON.stringify(storedArtist)}`);
+          if (storedArtist) {
             res.status(200);
-            jsonResponse.type = 'ARTIST_FOUND_NO_WATSON';
-            jsonResponse.message = 'Found artist ' + searchTerm + 
-              ' on spotify, but Watson has not analyzed their lyrics.' +
-              ' Please enter your email and we will let you know when we have that artist.';
-            res.send(JSON.stringify(jsonResponse, null, 3));
-          } else {
-            res.status(404);
-            jsonResponse.type = 'ARTIST_NOT_FOUND';
-            jsonResponse.message = 'Could not find: ' + searchTerm + ' on spotify. Please try again';
-            res.send(JSON.stringify(jsonResponse, null, 3));
+            res.send(storedArtist);
+            return;
           }
-        });
-      } else {
-        // Send back artist result
-        delete storedArtist._id;
-        console.log(`Stored Artists: ${JSON.stringify(storedArtist)}`);
-        if (storedArtist) {
-          res.status(200);
-          res.send(storedArtist);
-          return;
-        }      
-      }       
-    });    
-})
+        }
+      });
+  }) // end of post /search
 
 
   app.post('/startDataRetriever', function (req, res) {
@@ -147,9 +148,11 @@ MongoClient.connect(dbUrl, (err, client) => {
       };
       emailClient.sendMail(mailOptions);
     }); 
-  }); 
+  }); // end of post /startDataRetriever
+
+  // Start sever
   app.listen(port, () => console.log(`Listening on port ${port}`));  
 
-}); // mongo client
+}); // end of mongo client
 
 
