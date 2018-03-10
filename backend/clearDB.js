@@ -1,11 +1,12 @@
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://localhost/test";
-const collectionName = 'artist';
+const dbUrl = 'mongodb://localhost/spacejam';
+const dbName = 'spacejam'
+const collectionName = 'artistResults';
 
-MongoClient.connect(url, function(err, client) {
+MongoClient.connect(dbUrl, function(err, client) {
   if (err) throw err;
-  console.log('Created test db');
-  db = client.db('test');
+  console.log('Created DB:' + dbName);
+  db = client.db(dbName);
   
   // drop all in collection
   db.collection(collectionName).drop(function(err, delOK) {

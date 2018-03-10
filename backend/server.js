@@ -5,6 +5,8 @@ const emailClient = require('./emailClient.js');
 const spotifySearch = require('./spotifySearch.js');
 const MongoClient = require('mongodb').MongoClient;
 const dbUrl = 'mongodb://localhost/spacejam';
+const dbName = 'spacejam'
+const collectionName = 'artistResults';
 
 
 /* start the server after we connect to database */
@@ -12,7 +14,7 @@ MongoClient.connect(dbUrl, (err, client) => {
 
   if (err) throw err;
   console.log('Created spacejam database');
-  db = client.db('spacejam');
+  db = client.db(dbName);
 
   /* express routes and listen */
   const app = express();
@@ -56,9 +58,9 @@ MongoClient.connect(dbUrl, (err, client) => {
     // Search DB to see if artist exists
     let searchTerm = req.body.search;
     const query = { "artist.name": searchTerm };
-    const storedArtist = db.collection('artistResults')
+    const storedArtist = db.collection(collectionName)
       .findOne(query, (err, storedArtist) => {
-        console.log(`stored artist: ${storedArtist}`);
+        console.log(`in collection ${collectionName} result: ${storedArtist}`);
 
         // For DB error
         if (err) {
@@ -68,8 +70,16 @@ MongoClient.connect(dbUrl, (err, client) => {
           res.send(JSON.stringify(jsonResponse, null, 3));
         }
 
-        // if not in DB, look on spotify
-        if (!storedArtist) {
+        // Send back artist result if found in DB
+        if (storedArtist) {
+          delete storedArtist._id;
+          console.log(`Sending Stored Artists: ${JSON.stringify(storedArtist.artist.name)}`);
+          res.status(200);
+          res.send(storedArtist);
+          return;
+          
+        } else {
+          // if not in DB, look on spotify
           console.log('artist not found in db');
           console.log('Searching spotify for: ' + searchTerm);
           spotifySearch.search(searchTerm).then(function(found) {
@@ -87,17 +97,9 @@ MongoClient.connect(dbUrl, (err, client) => {
               res.send(JSON.stringify(jsonResponse, null, 3));
             }
           });
-        } else {
-          // Send back artist result if found in DB
-          delete storedArtist._id;
-          console.log(`Stored Artists: ${JSON.stringify(storedArtist)}`);
-          if (storedArtist) {
-            res.status(200);
-            res.send(storedArtist);
-            return;
-          }
         }
       });
+
   }) // end of post /search
 
 
@@ -130,7 +132,7 @@ MongoClient.connect(dbUrl, (err, client) => {
 
     dataRetriever.run(searchTerm).then(function(artistResult) {
       // Store inside database
-      db.collection('artistResults').save(artistResult, (err, dbRes) => {
+      db.collection(collectionName).save(artistResult, (err, dbRes) => {
         if (err) {
           console.log('Error storting artistResults into collection');
           throw err;

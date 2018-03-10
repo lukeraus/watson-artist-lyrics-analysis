@@ -1,12 +1,13 @@
-var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://localhost/test";
 var fs = require('fs');
-const collectionName = 'artist';
+var MongoClient = require('mongodb').MongoClient;
+const dbUrl = 'mongodb://localhost/spacejam';
+const dbName = 'spacejam'
+const collectionName = 'artistResults';
 
-MongoClient.connect(url, function(err, client) {
+MongoClient.connect(dbUrl, function(err, client) {
     if (err) throw err;
-    console.log('Created test db');
-    db = client.db('test');
+    console.log('Created DB: ' + dbName);
+    db = client.db(dbName);
   
     // argumenet passed
     if (!process.argv[2]) {
