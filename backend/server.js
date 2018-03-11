@@ -101,7 +101,7 @@ app.post('/search', function (req, res) {
     }
   }); // end of seach
 
-}) // end of post /search
+}); // end of post /search
 
 
 app.post('/startDataRetriever', function (req, res) {
