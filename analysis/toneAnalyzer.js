@@ -82,6 +82,7 @@ const getTopCategorizedEvents = (albums, results) => {
     const documentEmotionalTones = results[album].document_tone.tone_categories[0].tones;
     const documentTonesList = [];
     const scoreToTones = {};
+    eventsByAlbum[album] = {};
 
     _.each(documentEmotionalTones, (currTone) => {
       const currScore = currTone.score;
@@ -138,23 +139,23 @@ const getTopCategorizedEvents = (albums, results) => {
     const top3Tone2Score = _(scoresTone2).sortBy().takeRight(3).value();
 
     // Tone 1
-    eventsByAlbum[album][tone1] = [];
+    eventsByAlbum[album][tone1.tone_id] = [];
     _.each(top3Tone1Score, (toneScore) => {
       const sentenceDetails = scoresToSentenceTone1[toneScore];
       sentenceDetails.sentence = sentences[scoreToSentenceIdTone1[toneScore]].text;
-      eventsByAlbum[album][tone1].push(sentenceDetails);
+      eventsByAlbum[album][tone1.tone_id].push(sentenceDetails);
     });
 
     // Tone 2
-    eventsByAlbum[album][tone2] = [];
+    eventsByAlbum[album][tone2.tone_id] = [];
     _.each(top3Tone2Score, (toneScore) => {
       const sentenceDetails = scoresToSentenceTone2[toneScore];
       sentenceDetails.sentence = sentences[scoreToSentenceIdTone2[toneScore]].text;
-      eventsByAlbum[album][tone2].push(sentenceDetails);
+      eventsByAlbum[album][tone2.tone_id].push(sentenceDetails);
     });
   });
 
-  console.log(eventsByAlbum);
+  console.log(JSON.stringify(eventsByAlbum));
   return eventsByAlbum;
 };
 /**
