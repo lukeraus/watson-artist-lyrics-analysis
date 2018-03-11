@@ -76,7 +76,9 @@ app.post('/search', function (req, res) {
       delete storedArtist._id;
       console.log(`Sending Stored Artists: ${JSON.stringify(storedArtist.artist.name)}`);
       res.status(200);
-      res.send(storedArtist);
+      jsonResponse.type = 'ARTIST_FOUND';
+      jsonResponse.message = storedArtist;
+      res.send(JSON.stringify(jsonResponse, null, 3));
       return;
       
     } else {
