@@ -41,7 +41,9 @@ const getTones = async (wiki, artistName) => {
         toneResults[key] = getTonesPromise(wiki[key]);
     }
     const allResults = await Bluebird.props(toneResults);
+    // console.log(JSON.stringify(allResults));
     fs.writeFileSync(`${__dirname}/tone_results/${artistName.replace(/ /g, '').toLowerCase()}.json`, JSON.stringify(allResults, null, 4));
+    return allResults;
 };
 
 /**
@@ -59,14 +61,102 @@ const getTones = async (wiki, artistName) => {
  */
 const getToneEvents = async (wikiMap, artistName, topK = 2) => {
     try {
-        getTones(wikiMap, artistName);
-        return toneResults;
+        const results = await getTones(wikiMap, artistName);
+
+        // get all album names (keys)
+        const albums = Object.keys(wikiMap);
+        return getTopCategorizedEvents(albums, results);
     } catch (e) {
         console.log(e);
         throw e;
     }
 };
 
+const getTopCategorizedEvents = (albums, results) => {
+
+  const eventsByAlbum = {};
+
+  // Go through each album
+  _.each(albums, (album) => {
+    // Go to document_tone and look for the top 2 scoring
+    const documentEmotionalTones = results[album].document_tone.tone_categories[0].tones;
+    const documentTonesList = [];
+    const scoreToTones = {};
+
+    _.each(documentEmotionalTones, (currTone) => {
+      const currScore = currTone.score;
+      scoreToTones[currScore] = currTone;
+      documentTonesList.push(currScore);
+    });
+
+    const scores = _(documentTonesList).sortBy().takeRight(2).value();
+    const score1 = scores[0];
+    const score2 = scores[1];
+
+    /* const score1 = Math.max(documentTonesList);
+    documentTonesList.splice(documentTonesList.indexOf(score1), 1);
+    const score2 = Math.max(documentTonesList); */
+
+    const tone1 = scoreToTones[score1];
+    const tone2 = scoreToTones[score2];
+
+    // Go through all sentences and choose the top 3 sentences that have the
+    // highest score for each tone
+    const sentences = results[album].sentences_tone;
+    const scoreToSentenceIdTone1 = {};
+    const scoreToSentenceIdTone2 = {};
+    const scoresTone1 = [];
+    const scoresTone2 = [];
+    const scoresToSentenceTone1 = {};
+    const scoresToSentenceTone2 = {};
+
+    _.each(sentences, (sentence) => {
+      const sentenceId = sentence.sentence_id;
+      const sentenceTones = sentence.tone_categories[0].tones;
+
+      // Tone 1
+      let toneDetails = _.find(sentenceTones, function(o) {
+        return o.tone_id === tone1.tone_id;
+      });
+      let currScore = toneDetails.score;
+      scoresToSentenceTone1[currScore] = toneDetails;
+      scoreToSentenceIdTone1[currScore] = sentenceId;
+      scoresTone1.push(currScore);
+
+      // Tone 2
+      toneDetails = _.find(sentenceTones, function(o) {
+        return o.tone_id === tone2.tone_id;
+      });
+      currScore = toneDetails.score;
+      scoresToSentenceTone2[currScore] = toneDetails;
+      scoreToSentenceIdTone2[currScore] = sentenceId;
+      scoresTone2.push(currScore);
+    });
+
+    // find the top 3 of each tone low to high
+    const top3Tone1Score = _(scoresTone1).sortBy().takeRight(3).value();
+    const top3Tone2Score = _(scoresTone2).sortBy().takeRight(3).value();
+
+    // Tone 1
+    eventsByAlbum[album][tone1] = [];
+    _.each(top3Tone1Score, (toneScore) => {
+      const sentenceDetails = scoresToSentenceTone1[toneScore];
+      sentenceDetails.sentence = sentences[scoreToSentenceIdTone1[toneScore]].text;
+      eventsByAlbum[album][tone1].push(sentenceDetails);
+    });
+
+    // Tone 2
+    eventsByAlbum[album][tone2] = [];
+    _.each(top3Tone2Score, (toneScore) => {
+      const sentenceDetails = scoresToSentenceTone2[toneScore];
+      sentenceDetails.sentence = sentences[scoreToSentenceIdTone2[toneScore]].text;
+      eventsByAlbum[album][tone2].push(sentenceDetails);
+    });
+  });
+
+  console.log(eventsByAlbum);
+  return eventsByAlbum;
+};
 /**
 *
 * Test run of Tone Analyzer
@@ -77,4 +167,4 @@ const run = async (data) => {
   getToneEvents(wikiMap, artistOutlierData.artist);
 };
 
-// run(artistOutlierData);
+run(artistOutlierData);
