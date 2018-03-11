@@ -21,8 +21,8 @@ const artistOutlierData = {
 };
 
 /* promisify tone api */
-const getTonesPromise = async (lifeEvent) => {
-    return new Promise((resolve, reject) => {
+const getTonesPromise = async lifeEvent => (
+    new Promise((resolve, reject) => {
         toneAnalyzer.tone({
             text: lifeEvent,
             content_type: 'text/plain',
@@ -31,8 +31,8 @@ const getTonesPromise = async (lifeEvent) => {
             if (err) reject(err);
             resolve(res);
         });
-    });
-};
+    })
+);
 
 /* add the sentence tones for each outlier album */
 const getTones = async (wiki, artistName) => {
@@ -59,7 +59,7 @@ const getTones = async (wiki, artistName) => {
  *
  * returns tone sentences map
  */
-const getToneEvents = async (wikiMap, artistName, topK = 2) => {
+const getToneEvents = async (wikiMap, artistName) => {
     try {
         const results = await getTones(wikiMap, artistName);
 
@@ -72,8 +72,14 @@ const getToneEvents = async (wikiMap, artistName, topK = 2) => {
     }
 };
 
+/*
+*
+* Given the album information result from the Tone Analyzer, this function will
+* return the top 3 relevant events for each of the top 2 highest rated emotional
+* trait.
+*
+*/
 const getTopCategorizedEvents = (albums, results) => {
-
   const eventsByAlbum = {};
 
   // Go through each album
@@ -91,15 +97,8 @@ const getTopCategorizedEvents = (albums, results) => {
     });
 
     const scores = _(documentTonesList).sortBy().takeRight(2).value();
-    const score1 = scores[0];
-    const score2 = scores[1];
-
-    /* const score1 = Math.max(documentTonesList);
-    documentTonesList.splice(documentTonesList.indexOf(score1), 1);
-    const score2 = Math.max(documentTonesList); */
-
-    const tone1 = scoreToTones[score1];
-    const tone2 = scoreToTones[score2];
+    const tone1 = scoreToTones[scores[0]];
+    const tone2 = scoreToTones[scores[1]];
 
     // Go through all sentences and choose the top 3 sentences that have the
     // highest score for each tone
@@ -116,18 +115,14 @@ const getTopCategorizedEvents = (albums, results) => {
       const sentenceTones = sentence.tone_categories[0].tones;
 
       // Tone 1
-      let toneDetails = _.find(sentenceTones, function(o) {
-        return o.tone_id === tone1.tone_id;
-      });
+      let toneDetails = _.find(sentenceTones, o => o.tone_id === tone1.tone_id);
       let currScore = toneDetails.score;
       scoresToSentenceTone1[currScore] = toneDetails;
       scoreToSentenceIdTone1[currScore] = sentenceId;
       scoresTone1.push(currScore);
 
       // Tone 2
-      toneDetails = _.find(sentenceTones, function(o) {
-        return o.tone_id === tone2.tone_id;
-      });
+      toneDetails = _.find(sentenceTones, o => o.tone_id === tone2.tone_id);
       currScore = toneDetails.score;
       scoresToSentenceTone2[currScore] = toneDetails;
       scoreToSentenceIdTone2[currScore] = sentenceId;
