@@ -153,6 +153,10 @@ const getTopCategorizedEvents = (albums, results) => {
   console.log(JSON.stringify(eventsByAlbum));
   return eventsByAlbum;
 };
+
+exports.getToneEvents = getToneEvents;
+
+
 /**
 *
 * Test run of Tone Analyzer
