@@ -96,9 +96,10 @@ app.post('/search', function (req, res) {
             jsonResponse.message = 'Could not find: ' + searchTerm + ' on spotify. Please try again';
             res.send(JSON.stringify(jsonResponse, null, 3));
           }
-        });
+        }); // end of spotify search
       }
     }); // end of seach
+
   } catch (err) {
     // In case something goes wrong
     console.log('Internal error in search: ' + err);
@@ -158,14 +159,14 @@ app.post('/startDataRetriever', function (req, res) {
   } catch (err) {
     // In case something goes wrong
     console.log('Error running dataRetriver: ' + err);
-    
+
     // Send mail failure
     console.log('Sending failure email to: ' + email);
     var mailOptions = {
       from: 'spacejam2042@gmail.com',
       to: email,
       subject: 'Watson Lyrics analyzer failed',
-      text: 'Watson could not analyized lyrics for: ' + searchTerm + '. Please try again.'
+      text: 'Watson could not analyize lyrics for: ' + searchTerm + '. Please try again.'
     };
     emailClient.sendMail(mailOptions);
   }
