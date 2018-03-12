@@ -16,7 +16,7 @@
   .timeline-base .row.line {
     height: 8px;
     border-radius: 8px;
-    background: #000000;
+    background: #272727;
     width: 100%;
     margin: 0; }
   .timeline-base .row.years {
@@ -30,12 +30,12 @@
         position: relative;
         right: 16px; }
       .timeline-base .row.years .year .year-tick {
-        height: 16px;
+        height: 15px;
         width: 4px;
         position: relative;
         border-radius: 4px;
         top: -2px;
-        background: #000000; }
+        background: #272727; }
       @media (max-width: 650px) {
         .timeline-base .row.years .year {
           font-size: 12px;

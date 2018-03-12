@@ -1,6 +1,6 @@
 .nav {
   height: 64px;
-  background: #5392ff; }
+  background: #272727; }
   .nav .nav-button {
     display: inline-block;
     height: 100%;
@@ -9,11 +9,12 @@
     color: #ffffff;
     border: none;
     background: none;
+    transition: background-color 0.2s;
     border-right: 1px solid #ffffff; }
     .nav .nav-button:not(:first-child) {
       border-left: 1px solid #ffffff; }
     .nav .nav-button:hover, .nav .nav-button:focus {
-      background: #2d74da;
+      background: #595859;
       cursor: pointer; }
     .nav .nav-button .nav-button-content {
       width: 64px;

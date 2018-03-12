@@ -12,7 +12,8 @@
     "globals": {
         "window": true,
         "event": true,
-        "document": true
+        "document": true,
+        "fetch": true
     },
     "rules": {
         "no-tabs": 0,

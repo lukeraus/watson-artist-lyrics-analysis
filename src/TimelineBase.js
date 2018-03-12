@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import './static/styles/Navigation.css';
+import './static/styles/TimelineBase.css';
 
 import KanyeData from './data/kanyewest.json';
 
