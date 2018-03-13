@@ -12,6 +12,7 @@ $album-width: 100% - $percentiles-width;
 
 	// background: $black;
 	// color: $white;
+	background: $white;
 
 	@media (max-width: $mobile-width) {
 		padding: $padding-mobile;
@@ -48,11 +49,17 @@ $album-width: 100% - $percentiles-width;
 				height: 24px;
 				// color: $white;
 				position: absolute;
-				font-weight: 600;
+				font-weight: 500;
 
 				.year-text {
 					position: relative;
 					right: 16px;
+
+					&.has-life-event {
+						font-weight: 700;
+						bottom: 4px;
+						cursor: pointer;
+					}
 				}
 
 				.year-tick {

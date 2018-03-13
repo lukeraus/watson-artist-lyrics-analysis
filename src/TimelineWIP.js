@@ -23,7 +23,8 @@ class TimelineWIP extends Component {
 
   async submitEmail() {
     console.log(this.state.emailInput);
-    const pingBack = await fetch('ping');
+    const pingBack = await fetch('/artistList');
+    console.log(pingBack);
     const text = await pingBack.text();
     console.log(text);
     this.setState({

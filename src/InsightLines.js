@@ -52,6 +52,10 @@ class InsightLines extends Component {
 		this.svg = d3.select('.insights-svg');
 		this.lines = this.svg.append('g').classed('lines', true);
 		this.circles = this.svg.append('g').classed('circles', true);
+		this.tooltip = this.svg.append('text').classed('tooltip', 'true')
+			.at({
+				fontWeight: 500
+			});
 
 		Object.keys(this.insightData).forEach((trait) => {
 			const className = `${trait.split(' ').join('').toLowerCase()}`;
@@ -86,6 +90,13 @@ class InsightLines extends Component {
 							.at({
 								strokeWidth: 5
 							});
+
+						d3.select('.tooltip').at({
+							opacity: 1,
+							x: `${+self.at('cx') + 15}px`,
+							y: `${+self.at('cy') + 5}px`
+						})
+						.text(self.datum().percentile.toFixed(2));
 					})
 					.on('mousemove', () => {})
 					.on('mouseout', function mouseout() {
@@ -103,6 +114,10 @@ class InsightLines extends Component {
 							.at({
 								strokeWidth: 3
 							});
+
+						d3.select('.tooltip').at({
+							opacity: 0
+						});
 					});
 
 			this.lines.append('path')
@@ -113,6 +128,13 @@ class InsightLines extends Component {
 					stroke: () => this.color(trait),
 					d: this.line(this.insightData[trait])
 				});
+		});
+
+		this.tooltip
+		.at({
+			fontSize: 14,
+			x: 50,
+			y: 50
 		});
 	}
 

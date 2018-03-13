@@ -19,7 +19,7 @@ MongoClient.connect(dbUrl, (err, client) => {
 
 /* express routes and listen */
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8080;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -45,14 +45,14 @@ app.get('/', (req, res) => {
 app.get('/artistList', (req, res) => {
   console.log('Entering artistList....');
   console.log('Request: ' + JSON.stringify(req.body));
-  
+
   // Set boilerplate response
   res.setHeader('Content-Type', 'application/json');
   let jsonResponse = {
     type: 'DEFAULT',
     message: 'None'
   };
-  
+
   const fetch = db.collection(collectionName).find({}).toArray((err, result) => {
     // DB Error
     if (err) {
@@ -79,7 +79,7 @@ app.get('/artistList', (req, res) => {
 app.post('/search', function (req, res) {
   console.log('Entering search....');
   console.log('Request: ' + JSON.stringify(req.body));
-  
+
   // Set boilerplate response
   res.setHeader('Content-Type', 'application/json');
   let jsonResponse = {
@@ -95,11 +95,11 @@ app.post('/search', function (req, res) {
     res.send(JSON.stringify(jsonResponse, null, 3));
     return;
   }
- 
+
   // Search DB to see if artist exists
   let searchTerm = req.body.search;
   const query = { "artist.name": searchTerm };
-  
+
   db.collection(collectionName).findOne(query, (err, storedArtist) => {
     console.log(`in collection ${collectionName} result: ${storedArtist}`);
 
@@ -117,7 +117,7 @@ app.post('/search', function (req, res) {
       jsonResponse.message = storedArtist;
       res.send(JSON.stringify(jsonResponse, null, 3));
       return;
-      
+
     } else {
       // if not in DB, look on spotify
       console.log('artist not found in db');
@@ -146,7 +146,7 @@ app.post('/search', function (req, res) {
 app.post('/startDataRetriever', function (req, res) {
   console.log('Entering startDataRetriever....');
   console.log('Request: ' + JSON.stringify(req.body));
-  
+
   // Set boilerplate response
   res.setHeader('Content-Type', 'application/json');
   let jsonResponse = {
@@ -181,7 +181,7 @@ app.post('/startDataRetriever', function (req, res) {
           text: 'Watson could not analyize lyrics for: ' + searchTerm + '. Please try again.'
         };
         emailClient.sendMail(mailOptions);
-     
+
       } else {
         console.log('Successfully stored artistResults into collection');
         // Send mail success

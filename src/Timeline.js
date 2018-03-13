@@ -7,6 +7,7 @@ import ArtistBio from './ArtistBio';
 
 import Album from './Album';
 import InsightLines from './InsightLines';
+import LifeEvents from './LifeEvents';
 
 class Timeline extends Component {
 	constructor(props) {
@@ -38,19 +39,52 @@ class Timeline extends Component {
 
 		const dateRange = [new Date(startYear, 0, 1), new Date(endYear, 0, 1)];
 
+		const yearMap = {};
+
+		this.props.albums.forEach((album, i) => {
+			yearMap[album.title] = dates[i].getFullYear();
+		});
+
+		const emotionColors = {
+			anger: '#E62325',
+			joy: '#fed500',
+			sadness: '#2D74DA',
+			disgust: '#00aa5e',
+			fear: '#5a3ec8'
+		};
+
+		this.lifeEvents = Object.keys(this.props.lifeEvents).reduce((currEvents, album) => {
+			const tones = this.props.lifeEvents[album];
+			Object.keys(tones).forEach((tone) => {
+				const color = emotionColors[tone];
+				tones[tone].forEach((event) => {
+					currEvents.push({
+						sentence: event.sentence,
+						percentile: event.score,
+						year: yearMap[album],
+						color,
+						album,
+						tone
+					});
+				});
+			});
+			return currEvents;
+		}, []);
+
 		this.yearRange = d3.range(startYear, endYear).map(year => new Date(year, 0, 1));
 		this.scale = d3.scaleTime()
 			.domain(dateRange)
 			.range(['0%', '100%']);
 
 		this.state = {
-			rowWidth: 1200
+			rowWidth: 1200,
+			tooltipVisible: []
 		};
 	}
 
 	componentDidMount() {
 		setTimeout(this.updateWidth, 0);
-		window.addEventListener('resize', this.resize); // eslint-disable-line no-undef
+		window.addEventListener('resize', this.resize);
 	}
 
 	updateWidth = () => {
@@ -62,6 +96,15 @@ class Timeline extends Component {
 	}
 
 	resize = () => setTimeout(() => this.updateWidth(), 10)
+
+	updateTooltip = (i, bool) => {
+		console.log(bool);
+		const visible = this.state.tooltipVisible;
+		visible[i] = bool;
+		this.setState({
+			tooltipVisible: visible
+		});
+	}
 
 	render() {
 		const albums = this.props.albums.map((album, i) => {
@@ -83,12 +126,28 @@ class Timeline extends Component {
 				/>);
 		});
 
-		const years = this.yearRange.map(year => (
-			<div className="year" style={{ left: this.scale(year) }} key={year}>
-				<span className="year-text">{year.getFullYear()}</span>
-				<div className="year-tick" />
-			</div>
-		));
+		const years = this.yearRange.map((year, i) => {
+			const lifeEvents = this.lifeEvents.filter(event => event.year === year.getFullYear());
+			const textClass = lifeEvents.length > 0 ? 'year-text has-life-event' : 'year-text';
+			let eventTooltip = null;
+			if (lifeEvents.length > 0) {
+				eventTooltip = <LifeEvents events={this.lifeEvents} visible={this.state.tooltipVisible[i]}/>;
+			}
+			// console.log(this.state);
+			return (
+				<div className="year" style={{ left: this.scale(year) }} key={year}>
+					{eventTooltip}
+					<span
+						className={textClass}
+						onMouseEnter={this.updateTooltip.bind(this, i, true)}
+						onMouseLeave={this.updateTooltip.bind(this, i, false)}
+					>
+						{year.getFullYear()}
+					</span>
+					<div className="year-tick" />
+				</div>
+			);
+		});
 
 		return (
 			<div className="timeline-root">

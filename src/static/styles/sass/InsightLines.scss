@@ -34,5 +34,13 @@
 		.circle {
 			// fill: $white;
 		}
+
+		.tooltip{
+			paint-order: stroke;
+			stroke: $white;
+			font-size: 18px;
+			stroke-width: 6;
+			transition: opacity 0.5s;
+		}
 	}
 }
