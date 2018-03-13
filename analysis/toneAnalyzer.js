@@ -1,4 +1,5 @@
 const ToneAnalyzerV3 = require('watson-developer-cloud/tone-analyzer/v3');
+const config = require('../credentials.json').toneAnalyzer;
 const eventScraper = require('../scraper/eventsScraper');
 const _ = require('lodash');
 const fs = require('fs');
@@ -8,10 +9,10 @@ const toneResults = {};
 
 /* initialize API */
 const toneAnalyzer = new ToneAnalyzerV3({
-  username: '60b9c033-b301-40c4-8cb1-0244cbdf5380',
-  password: 'NxgCaMufw5Zk',
-  version_date: '2016-05-19',
-  url: 'https://gateway.watsonplatform.net/tone-analyzer/api'
+  username: config.username,
+  password: config.password,
+  version_date: config.version_date,
+  url: config.url
 });
 
 /* hardcoded input sample */
@@ -42,7 +43,7 @@ const getTones = async (wiki, artistName) => {
     }
     const allResults = await Bluebird.props(toneResults);
     // console.log(JSON.stringify(allResults));
-    fs.writeFileSync(`${__dirname}/tone_results/${artistName.replace(/ /g, '').toLowerCase()}.json`, JSON.stringify(allResults, null, 4));
+    // fs.writeFileSync(`${__dirname}/tone_results/${artistName.replace(/ /g, '').toLowerCase()}.json`, JSON.stringify(allResults, null, 4));
     return allResults;
 };
 
@@ -131,11 +132,18 @@ const getTopCategorizedEvents = (albums, results) => {
 
     // find the top 3 of each tone low to high
     const top3Tone1Score = _(scoresTone1).sortBy().takeRight(3).value();
+    // const topTone1Score = _.filter(scoresTone1, (score) => {
+    //  return score  > 0.5;
+    // })
     const top3Tone2Score = _(scoresTone2).sortBy().takeRight(3).value();
+    // const topTone2Score = _.filter(scoresTone2, (score) => {
+    //  return score  > 0.5;
+    // })
 
     // Tone 1
     eventsByAlbum[album][tone1.tone_id] = [];
     _.each(top3Tone1Score, (toneScore) => {
+    // _.each(topTone1Score, (toneScore) => {
       const sentenceDetails = scoresToSentenceTone1[toneScore];
       sentenceDetails.sentence = sentences[scoreToSentenceIdTone1[toneScore]].text;
       eventsByAlbum[album][tone1.tone_id].push(sentenceDetails);
@@ -144,13 +152,14 @@ const getTopCategorizedEvents = (albums, results) => {
     // Tone 2
     eventsByAlbum[album][tone2.tone_id] = [];
     _.each(top3Tone2Score, (toneScore) => {
+    //_.each(topTone2Score, (toneScore) => {
       const sentenceDetails = scoresToSentenceTone2[toneScore];
       sentenceDetails.sentence = sentences[scoreToSentenceIdTone2[toneScore]].text;
       eventsByAlbum[album][tone2.tone_id].push(sentenceDetails);
     });
   });
 
-  console.log(JSON.stringify(eventsByAlbum));
+  // console.log(JSON.stringify(eventsByAlbum));
   return eventsByAlbum;
 };
 
@@ -162,9 +171,9 @@ exports.getToneEvents = getToneEvents;
 * Test run of Tone Analyzer
 *
 */
-const run = async (data) => {
-  const wikiMap = await eventScraper.getLifeEvents(data);
-  getToneEvents(wikiMap, artistOutlierData.artist);
-};
+// const run = async (data) => {
+//   const wikiMap = await eventScraper.getLifeEvents(data);
+//   getToneEvents(wikiMap, artistOutlierData.artist);
+// };
 
-run(artistOutlierData);
+// run(artistOutlierData);

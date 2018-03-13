@@ -90,12 +90,12 @@ const pickTopOutliers = () => {
 };
 
 /* load the artisit data from retriever as javascritp object */
-const loadArtistResults = async (name) => {
-    const path = name.replace(/ /g, '').toLowerCase() + '.json';
-    const readFile = util.promisify(fs.readFile);
-    const contents = await readFile(`${__dirname}/artists_results/${path}`, 'UTF-8');
-    return JSON.parse(contents);
-};
+// const loadArtistResults = async (name) => {
+//     const path = name.replace(/ /g, '').toLowerCase() + '.json';
+//     const readFile = util.promisify(fs.readFile);
+//     const contents = await readFile(`${__dirname}/artists_results/${path}`, 'UTF-8');
+//     return JSON.parse(contents);
+// };
 
 
 /**
@@ -108,8 +108,7 @@ const loadArtistResults = async (name) => {
  * 
  * return list of anomalistic albums, e.g. ['1989', 'Fearless'] for Taylor Swift
  */
-exports.getOutliers = async (artistName) => {    
-    const artistResults = await loadArtistResults(artistName);     
+exports.getOutliers = async (artistResults) => {        
     getInsightsByCategory(artistResults);
     countOutliers(artistResults);
     return pickTopOutliers();
