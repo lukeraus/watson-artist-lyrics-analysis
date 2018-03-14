@@ -7,6 +7,7 @@ const watsonPersonality = require('./watson_personality.js');
 const metadataCollector = require('./scraper/metadataCollector.js');
 const outlierDetector = require('./outlierDetector.js');
 const eventsScraper = require('./scraper/eventsScraper.js');
+const bioScraper = require('./scraper/bioScraper.js');
 const toneAnalyzer = require('./toneAnalyzer');
 const watsonConversation = require('./watsonConversation');
 const Bluebird = require('bluebird');
@@ -203,10 +204,14 @@ exports.run = async (artistName) => {
 		});
 		console.log('Personality Insights received');
     
-		// const fileName = `./analysis/artists_results/${artistName.toLowerCase().split(' ').join('')}.json`;
-    // fs.writeFileSync(fileName, JSON.stringify(resultJson, null, 4));
+		// add life events
     const wikiEvents = await getLifeEventsData(artistName, resultJson);
     resultJson.lifeEvents = wikiEvents;
+
+    // add biography description
+    const bio = await bioScraper.getBio(artistName);
+    resultJson.bio = bio;
+    
     console.log(`Final Artist Results: ${JSON.stringify(resultJson, null, 4)}`);
     return resultJson;
 
@@ -216,6 +221,5 @@ exports.run = async (artistName) => {
 		throw err;
 	}
 };
-
 
 // exports.run('Justin Timberlake');
