@@ -9,6 +9,12 @@
         "node": true,
         "mocha": true
     },
+    "globals": {
+        "window": true,
+        "event": true,
+        "document": true,
+        "fetch": true
+    },
     "rules": {
         "no-tabs": 0,
         "indent": ["off", "tab"],
@@ -28,6 +34,9 @@
         "react/jsx-indent": ["off", "tab"],
         "react/jsx-indent-props": ["off", "tab"],
         "react/prop-types": "off",
-        "import/no-extraneous-dependencies": "off"
+        "import/no-extraneous-dependencies": "off",
+        "no-restricted-globals": "off",
+        "jsx-a11y/anchor-is-valid": "off",
+        "react/jsx-no-bind": false
     }
 }

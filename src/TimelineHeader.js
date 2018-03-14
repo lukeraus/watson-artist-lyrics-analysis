@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './styles/TimelineHeader.css';
+import './static/styles/TimelineHeader.css';
 
 class TimelineHeader extends Component {
 	constructor(props) {

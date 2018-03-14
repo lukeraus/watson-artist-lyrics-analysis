@@ -1,0 +1,43 @@
+.searchBar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 75px;
+}
+
+.searchBar input {
+  width: 500px;
+  font-size: 36px;
+  height: 50px;
+  padding: 5px 0 5px 15px;
+}
+
+.searchIcon > svg {
+  height: 40px;
+  width: 40px;
+  padding-left: 20px;
+}
+
+.artists {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.artistDiv {
+  text-align: center;
+  padding: 25px;
+  border: 2px solid #E0E0E0;
+  margin: 40px;
+  opacity: 0.85;
+  cursor: pointer;
+}
+
+.artistDiv > img {
+  height: 30vh;
+}
+
+.artistDiv > h2 {
+  margin-bottom: 0;
+}

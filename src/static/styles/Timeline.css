@@ -1,3 +1,11 @@
+.timeline-root {
+  padding: 64px;
+  margin: 0;
+  background: #ffffff; }
+  @media (max-width: 650px) {
+    .timeline-root {
+      padding: 16px; } }
+
 .timeline-base .row {
   width: 100%;
   position: relative;
@@ -9,7 +17,7 @@
   .timeline-base .row.line {
     height: 8px;
     border-radius: 8px;
-    background: #ffffff;
+    background: #272727;
     width: 100%;
     margin: 0; }
   .timeline-base .row.years {
@@ -17,19 +25,22 @@
     .timeline-base .row.years .year {
       font-size: 16px;
       height: 24px;
-      color: #ffffff;
       position: absolute;
-      font-weight: 600; }
+      font-weight: 500; }
       .timeline-base .row.years .year .year-text {
         position: relative;
         right: 16px; }
+        .timeline-base .row.years .year .year-text.has-life-event {
+          font-weight: 700;
+          bottom: 4px;
+          cursor: pointer; }
       .timeline-base .row.years .year .year-tick {
-        height: 16px;
+        height: 15px;
         width: 4px;
         position: relative;
         border-radius: 4px;
         top: -2px;
-        background: white; }
+        background: #272727; }
       @media (max-width: 650px) {
         .timeline-base .row.years .year {
           font-size: 12px;
@@ -49,7 +60,6 @@
       margin-top: 35px; }
   .timeline-base .column.line {
     width: 8px;
-    background-color: #ffffff;
     border-radius: 16px; }
   .timeline-base .column.years {
     width: calc(30% - 4px); }

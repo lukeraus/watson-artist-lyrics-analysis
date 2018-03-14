@@ -4,8 +4,20 @@ $line-width: 8px;
 $percentiles-width: 30%;
 $album-width: 100% - $percentiles-width;
 
-
 // NOTE: $mobile-width: 650px;
+
+.timeline-root {
+	padding: $padding;
+	margin: 0;
+
+	// background: $black;
+	// color: $white;
+	background: $white;
+
+	@media (max-width: $mobile-width) {
+		padding: $padding-mobile;
+	}
+}
 
 .timeline-base {
 
@@ -23,7 +35,8 @@ $album-width: 100% - $percentiles-width;
 		&.line {
 			height: $line-width;
 			border-radius: $line-width;
-			background: $white;
+			// background: $white;
+			background: $black;
 			width: 100%;
 			margin: 0;
 		}
@@ -34,22 +47,29 @@ $album-width: 100% - $percentiles-width;
 			.year {
 				font-size: 16px;
 				height: 24px;
-				color: $white;
+				// color: $white;
 				position: absolute;
-				font-weight: 600;
+				font-weight: 500;
 
 				.year-text {
 					position: relative;
 					right: 16px;
+
+					&.has-life-event {
+						font-weight: 700;
+						bottom: 4px;
+						cursor: pointer;
+					}
 				}
 
 				.year-tick {
-					height: 16px;
+					height: 15px;
 					width: 4px;
 					position: relative;
 					border-radius: 4px;
 					top: -2px;
-					background: white;
+					// background: white;
+					background: $black
 				}
 
 				@media (max-width: $mobile-width) {
@@ -81,7 +101,7 @@ $album-width: 100% - $percentiles-width;
 
 		&.line {
 			width: $line-width;
-			background-color: $white;
+			// background-color: $white;
 			border-radius: 16px;
 		}
 

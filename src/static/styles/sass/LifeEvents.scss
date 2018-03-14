@@ -1,0 +1,66 @@
+@import './utils.scss';
+
+$tooltip-width: 260px;
+$tooltip-height: 64px;
+
+.life-events-wrapper {
+	position: absolute;
+	right: 0;
+	left: -130px;
+	bottom: 40px;
+
+	background: $white;
+	z-index: 10;
+
+	width: $tooltip-width;
+	border: 1px solid;
+
+	display: none;
+
+	&.visible {
+		display: block;
+	}
+
+	.event-wrapper {
+		height: $tooltip-height;
+		width: 100%;
+		position: relative;
+
+
+		&:not(:last-child) {
+			border-bottom: 0.5px solid;
+		}
+
+		.event-bg {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+		}
+
+		.event-content {
+			position: absolute;
+			width: 100%;
+			height: 48px;
+			overflow-y: hidden;
+			z-index: 1;
+
+			p {
+				line-height: 1;
+				font-size: 12px;
+				padding: 12px;
+				font-weight: 300;
+				margin: 0;
+			}
+		}
+	}
+
+	.arrow-stub {
+		width: 0;
+		height: 0;
+		border-left: 12px solid transparent;
+		position: relative;
+		left: 120px;
+		border-right: 12px solid transparent;
+		border-top: 10px solid #272727;
+	}
+}
