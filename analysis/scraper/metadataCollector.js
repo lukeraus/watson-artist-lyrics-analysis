@@ -1,4 +1,5 @@
 const fs = require('fs');
+const cheerio = require('cheerio');
 const rp = require('request-promise');
 
 const config = JSON.parse(fs.readFileSync('./credentials.json')).spotify;
@@ -56,6 +57,41 @@ const getMetadata = async (query, queryType, accessToken) => {
 	}
 };
 
+// Hard-coded and bad test to see if its in AZ-lyrics
+const testAzLyrics = async (artistName) => {
+	try {
+		var cleanedName = artistName.toLowerCase().split(' ').join('');
+
+		let letterCategory = cleanedName.startsWith('the') ? cleanedName[3] : cleanedName[0];
+		var options = {
+			url: `https://www.azlyrics.com/${letterCategory}/${cleanedName}.html`,
+			headers: {
+				'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36'
+			},
+			transform: body => cheerio.load(body)
+		}
+		const result = await new Promise(resolve => setTimeout(() => resolve(rp(options)), 5000));
+		return true;
+	} catch (err) {
+		try {
+			const split = artistName.toLowerCase().split(' ');
+			let newUrl = '';
+			if (split.length > 1) {
+			  cleanedName = split[1];
+			  letterCategory = cleanedName.startsWith('the') ? cleanedName[3] : cleanedName[0];
+			  newUrl = `https://www.azlyrics.com/${letterCategory}/${cleanedName}.html`;
+			}
+			const newOptions = Object.assign({}, options);
+			newOptions.url = newUrl;
+			const result = await new Promise(resolve => setTimeout(() => resolve(rp(newOptions)), 5000));
+			return true;
+		} catch (err2) {
+			return false;
+		}
+	}
+	return true;
+}
+
 exports.getArtistMetadata = async (artistName, accessToken) => {
 	try {
 		const result = await getMetadata(artistName, metadataTypes.ARTIST, accessToken);
@@ -63,6 +99,13 @@ exports.getArtistMetadata = async (artistName, accessToken) => {
 		delete artist.type;
 		artist.images = artist.images[0];
 		artist.followers = artist.followers.total;
+
+		const inAzLyrics = await testAzLyrics(artistName);
+
+		if (!inAzLyrics) {
+			throw "Artist Not Found in AzLyrics";
+		}
+
 		return artist;
 	} catch (err) {
 		return {
