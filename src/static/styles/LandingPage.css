@@ -26,7 +26,8 @@
   padding: 25px;
   border: 2px solid #E0E0E0;
   margin: 40px;
-  opacity: 0.85; }
+  opacity: 0.85;
+  cursor: pointer; }
 
 .artistDiv > img {
   height: 30vh; }

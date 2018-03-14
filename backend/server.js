@@ -134,6 +134,7 @@ app.post('/search', function (req, res) {
           res.status(404);
           jsonResponse.type = 'ARTIST_NOT_FOUND';
           jsonResponse.message = 'Could not find: ' + searchTerm + ' on spotify. Please try again';
+          jsonResponse.artistName = searchTerm;
           res.send(JSON.stringify(jsonResponse, null, 3));
         }
       }); // end of spotify search

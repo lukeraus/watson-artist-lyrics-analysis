@@ -98,7 +98,6 @@ class Timeline extends Component {
 	resize = () => setTimeout(() => this.updateWidth(), 10)
 
 	updateTooltip = (i, bool) => {
-		console.log(bool);
 		const visible = this.state.tooltipVisible;
 		visible[i] = bool;
 		this.setState({
@@ -131,9 +130,8 @@ class Timeline extends Component {
 			const textClass = lifeEvents.length > 0 ? 'year-text has-life-event' : 'year-text';
 			let eventTooltip = null;
 			if (lifeEvents.length > 0) {
-				eventTooltip = <LifeEvents events={this.lifeEvents} visible={this.state.tooltipVisible[i]}/>;
+				eventTooltip = <LifeEvents events={lifeEvents} visible={this.state.tooltipVisible[i]}/>;
 			}
-			// console.log(this.state);
 			return (
 				<div className="year" style={{ left: this.scale(year) }} key={year}>
 					{eventTooltip}

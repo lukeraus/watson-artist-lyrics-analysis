@@ -165,7 +165,7 @@ class InsightLines extends Component {
 			};
 			return (
 				<g style={style} key={trait}>
-					<rect width="16" height="16"fill={this.color(trait)} />
+					<circle r="8" cx="8" cy="8" fill={this.color(trait)} />
 					<text x="22" y="14">{trait}</text>
 				</g>
 			);

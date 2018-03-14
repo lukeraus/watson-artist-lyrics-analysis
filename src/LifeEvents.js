@@ -7,7 +7,7 @@ class LifeEvents extends Component {
 		const className = this.props.visible ? "life-events-wrapper visible" : "life-events-wrapper";
 
 		const tooltipHeight = {
-			height: 64 * this.props.events.length
+			height: 64.2 * this.props.events.length
 		};
 
 		const eventDivs = this.props.events.map((event) => {

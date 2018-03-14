@@ -9,7 +9,7 @@
   border: 1px solid;
   display: none; }
   .life-events-wrapper.visible {
-    display: block !important; }
+    display: block; }
   .life-events-wrapper .event-wrapper {
     height: 64px;
     width: 100%;
