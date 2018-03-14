@@ -46,11 +46,11 @@ exports.getLifeEvents = async (artistOutlierData) => {
           let albumInfo = $(`span[id="${formattedSectionName}"]`).parent();
           let lifeEventForAlbum = '';
           do {
-            if (albumInfo[0].name === 'p') {
+            if (albumInfo[0] && albumInfo[0].name === 'p') {
               lifeEventForAlbum += albumInfo.text();
             }
             albumInfo = albumInfo.next();
-          } while (albumInfo[0].name !== 'h3');
+          } while (albumInfo[0] && albumInfo[0].name !== 'h3');
 
           lifeEvent[albumData[i]] = lifeEventForAlbum;
         }

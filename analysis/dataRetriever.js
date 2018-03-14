@@ -83,16 +83,17 @@ const filterEvents = async (toneResults) => {
 // run life events function
 const getLifeEventsData = async (artistName, artistResults) => {
     const outlierAlbums = await outlierDetector.getOutliers(artistResults);
-    const wikiEvents = await eventsScraper.getLifeEvents({'artist': artistName, 'albums': outlierAlbums});
+    let wikiEvents = await eventsScraper.getLifeEvents({'artist': artistName, 'albums': outlierAlbums});
+    wikiEvents = _.pickBy(wikiEvents, _.identity);
     const topTones = await toneAnalyzer.getToneEvents(wikiEvents, artistName);
     // console.log('`\n -------- NO-filter Results ---------- \n')
     // console.log(JSON.stringify(topTones, null, 4));
     
-    const filteredTones = await filterEvents(topTones);    
+    // const filteredTones = await filterEvents(topTones);    
     console.log('`\n -------- filter Results ---------- \n')
-    console.log(JSON.stringify(filteredTones, null, 4));
+    // console.log(JSON.stringify(filteredTones, null, 4));
 
-    return filteredTones;
+    return topTones;
 };
 
 // (async function () {
@@ -206,7 +207,7 @@ exports.run = async (artistName) => {
     // fs.writeFileSync(fileName, JSON.stringify(resultJson, null, 4));
     const wikiEvents = await getLifeEventsData(artistName, resultJson);
     resultJson.lifeEvents = wikiEvents;
-    console.log(`Final Artist Results: ${JSON.stringify(resultJson)}`);
+    console.log(`Final Artist Results: ${JSON.stringify(resultJson, null, 4)}`);
     return resultJson;
 
 		// And we oooout
@@ -217,4 +218,4 @@ exports.run = async (artistName) => {
 };
 
 
-exports.run(process.argv[2] || 'Taylor Swift');
+// exports.run('Justin Timberlake');
