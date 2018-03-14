@@ -9,7 +9,7 @@ class App extends Component {
     return (
       <div className="root">
         <Nav />
-        <Main />
+        <Main className="main"/>
       </div>
     );
   }

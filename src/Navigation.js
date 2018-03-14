@@ -9,7 +9,7 @@ class Nav extends Component {
 			<div className="nav">
 				<Link to="/" className="nav-button">
 					<div className="nav-button-content">
-						Home
+						SPACE JAM
 					</div>
 				</Link>
 			</div>
