@@ -108,12 +108,28 @@ const pickTopOutliers = () => {
  * 
  * return list of anomalistic albums, e.g. ['1989', 'Fearless'] for Taylor Swift
  */
-exports.getOutliers = async (artistResults) => {        
+const getOutliers = async (artistResults) => {        
     getInsightsByCategory(artistResults);
     countOutliers(artistResults);
-    return pickTopOutliers();
+    const topAlbums = pickTopOutliers();
+    console.log(`TOP ALBUMS: ${topAlbums}`);
+    if (!topAlbums || topAlbums.length <= 1) {
+      console.log('Return First and Last album\n');
+      const allAlbums = _.map(artistResults.albums, 'title');
+      return [allAlbums[0], allAlbums[allAlbums.length -1]]
+    }
+    return topAlbums;
 };
 
 
 // quick test for debug
-// getOutliers('Taylor Swift');
+// (async function () {
+//     const readFile = util.promisify(fs.readFile);     
+//     let cplay = await readFile(__dirname + '/artists_results/adele.json', 'UTF-8');
+//     cplay = JSON.parse(cplay);
+    
+//     const temp = await  getOutliers(cplay);
+//     console.log(`OUTLIER ALBUMS: ${JSON.stringify(temp)}`);    
+// })();
+
+exports.getOutliers = getOutliers;
