@@ -3,6 +3,7 @@ import { Switch, Route, withRouter } from 'react-router-dom';
 
 import TimelineBase from './TimelineBase';
 import LandingPage from './LandingPage';
+import Nav from './Navigation';
 
 class Main extends Component {
 	constructor(props) {
@@ -13,6 +14,7 @@ class Main extends Component {
 	}
 
 	search = (artist) => {
+		console.log(artist);
 		this.setState({artist});
 		this.props.history.push(`/timeline`);
 	}
@@ -20,14 +22,17 @@ class Main extends Component {
 	// For the future, encode the artist name into the url and decode it
 	render() {
 		return (
-			<main>
-				<Switch>
-					<Route path="/timeline" render={() => <TimelineBase artist={this.state.artist} />} />
-					<Route
-						path="/"
-						component={() => <LandingPage search={this.search} />} />
-				</Switch>
-			</main>
+			<div>
+				<Nav search={this.search} />
+				<main>
+					<Switch>
+						<Route path="/timeline" render={() => <TimelineBase artist={this.state.artist} />} />
+						<Route
+							path="/"
+							component={() => <LandingPage search={this.search} />} />
+					</Switch>
+				</main>
+			</div>
 		);
 	}
 }
