@@ -71,6 +71,27 @@ const priorityMerge = (filter, unfilter) => {
   return filter;
 };
 
+/* merges events from filter above unfilter, i.e. most important on top */
+const priorityMerge = (filter, unfilter) => {
+  // get album, emotion pairs
+  const indexPair = [];
+  _.each(unfilter, (album, albumKey) => {
+    _.each(album, (emotion, emotionKey) => {
+      indexPair.push([albumKey, emotionKey]);
+    });
+  });
+
+  // merge both using priority, via union with identity
+  _.each(indexPair, (pair) => {
+    const sub = filter[pair[0]][pair[1]];    
+    const all = unfilter[pair[0]][pair[1]];    
+    const union = _.unionBy(sub, all, 'sentence');    
+    filter[pair[0]][pair[1]] = union;
+  });
+
+  return filter;
+};
+
 
 /* gets the life events for a given artist using personality data */
 const getLifeEventsData = async (artistName, artistResults) => {
