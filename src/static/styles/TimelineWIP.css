@@ -64,6 +64,14 @@
           color: #ffffff;
           font-size: 24px;
           background: #272727; }
+    .wip-page .content .email-confirmed {
+      color: #34bc6e;
+      font-size: 18px;
+      text-align: center;
+      margin: 0;
+      opacity: 0; }
+      .wip-page .content .email-confirmed.visible {
+        opacity: 1; }
     @media (max-width: 650px) {
       .wip-page .content {
         width: 300px; }

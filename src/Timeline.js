@@ -146,12 +146,11 @@ class Timeline extends Component {
 				</div>
 			);
 		});
-
+		// <ArtistBio artist={this.props.artist} />
 		return (
 			<div className="timeline-root">
 				<TimelineHeader artist={this.props.artist} />
 				<div className="body-root">
-					<ArtistBio artist={this.props.artist} />
 					<div className="timeline-base">
 						<div
 							className="row insights"

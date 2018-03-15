@@ -129,6 +129,7 @@ app.post('/search', function (req, res) {
           jsonResponse.message = 'Found artist ' + searchTerm +
             ' on spotify, but Watson has not analyzed their lyrics.' +
             ' Please enter your email and we will let you know when we have that artist.';
+          jsonResponse.artistName = searchTerm;
           res.send(JSON.stringify(jsonResponse, null, 3));
         } else {
           res.status(404);
@@ -190,8 +191,8 @@ app.post('/startDataRetriever', function (req, res) {
         var mailOptions = {
           from: 'spacejam2042@gmail.com',
           to: email,
-          subject: 'Watson Lyrics analyzer done!',
-          text: 'Succefully analyized: ' + searchTerm
+          subject: `Watson Lyrics Analyzer Done for ${searchTerm}!`,
+          text: `Congrats! Watson has successfully ${searchTerm}'s albums and lyrics. Please drop us a visit to see it!`
         };
         emailClient.sendMail(mailOptions);
       }
