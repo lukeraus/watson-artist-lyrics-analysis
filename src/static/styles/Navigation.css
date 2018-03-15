@@ -9,15 +9,14 @@
     color: #ffffff;
     border: none;
     background: none;
-    transition: background-color 0.2s;
-    border-right: 1px solid #ffffff; }
+    transition: background-color 0.2s; }
     .nav .nav-button:not(:first-child) {
       border-left: 1px solid #ffffff; }
     .nav .nav-button:hover, .nav .nav-button:focus {
       background: #595859;
       cursor: pointer; }
     .nav .nav-button .nav-button-content {
-      width: 64px;
       height: 34px;
       padding: 12px;
-      margin-top: 6px; }
+      margin-top: 6px;
+      font-weight: 400; }

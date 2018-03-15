@@ -35,9 +35,17 @@
 }
 
 .artistDiv > img {
-  height: 30vh;
+  object-fit: cover;
+  height: 250px;
+  width: 250px;
 }
 
 .artistDiv > h2 {
   margin-bottom: 0;
+}
+
+.heroDiv {
+  height: 100%;
+  width: 100%;
+  background-image: url("https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?ixlib=rb-0.3.5&s=1c98137a7810a5d5e853b2d7736fd3bb&auto=format&fit=crop&w=1500&q=80");
 }

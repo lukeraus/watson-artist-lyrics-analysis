@@ -15,7 +15,6 @@
 		border: none;
 		background: none;
 		transition: background-color 0.2s;
-		border-right: 1px solid $white;
 
 		&:not(:first-child) {
 			border-left: 1px solid $white;
@@ -27,7 +26,6 @@
 		}
 
 		.nav-button-content {
-			width: 64px;
 			height: 34px;
 			padding: 12px;
 			margin-top: 6px;

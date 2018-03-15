@@ -59,15 +59,25 @@ class LandingPage extends Component {
         <div className="artistDiv">
           <img
             alt="Justin Timberlake"
-            src="https://vignette.wikia.nocookie.net/simpsons/images/2/2a/Justin_timberlake.jpeg/revision/latest?cb=20150913223250"
+            src="https://amp.businessinsider.com/images/51f96ef8eab8ea676900002e-750-498.jpg"
           />
           <h2>JUSTIN TIMBERLAKE</h2>
         </div>
       </div>
     );
 
+    const hero = (
+      <div className="heroDiv">
+        <div className="heroText">
+          <h1>Get personal with<br />your favorite artists</h1>
+          <p>See how their lives impacted their music</p>
+        </div>
+      </div>
+    )
+
     return (
       <div className="landing-page">
+        {hero}
         {searchBar}
         {artists}
       </div>
