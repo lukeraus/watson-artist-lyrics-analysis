@@ -181,9 +181,13 @@ exports.run = async (artistName) => {
     const wikiEvents = await getLifeEventsData(artistName, resultJson);
     resultJson.lifeEvents = wikiEvents;
 
-    // add biography description
-    const bio = await bioScraper.getBio(artistName);
-    resultJson.bio = bio;
+		try {
+			// add biography description
+			const bio = await bioScraper.getBio(artistName);
+			resultJson.bio = bio;
+		} catch (e) {
+			console.log("Couldn't make a bio");
+		}
 
     console.log(`Final Artist Results: ${JSON.stringify(resultJson, null, 4)}`);
     return resultJson;
