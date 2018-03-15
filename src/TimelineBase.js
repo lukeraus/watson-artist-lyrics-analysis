@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import Timeline from './Timeline';
 import TimelineWIP from './TimelineWIP';
 import TimelineNotFound from './TimelineNotFound';
+import loadingGif from './static/loading.gif';
 
 import './static/styles/TimelineBase.css';
 
@@ -122,13 +123,11 @@ class TimelineBase extends Component {
 						}
 					};
 				}
-				this.forceUpdate();
+				// this.forceUpdate();
 				break;
 			case 'ARTIST_NOT_FOUND':
-				this.data = response.artistName;
-				break;
 			case 'ARTIST_FOUND_NO_WATSON':
-				// yeah nothing special happens here
+				this.data = response.artistName;
 				break;
 			default:
 				break;
@@ -144,15 +143,20 @@ class TimelineBase extends Component {
 		switch (this.state.case) {
 			case 'ARTIST_FOUND':
 				pageToRender = <Timeline {...this.data} />;
+				console.log(this.data);
 				break;
 			case 'ARTIST_NOT_FOUND':
 				pageToRender = <TimelineNotFound artistName={this.data} />;
 				break;
 			case 'ARTIST_FOUND_NO_WATSON':
-				pageToRender = <TimelineWIP />;
+				pageToRender = <TimelineWIP artist={this.data}/>;
 				break;
 			default:
-				pageToRender = null;
+				pageToRender = (
+					<div className="sloading-container">
+						<img className="gif" src={loadingGif} alt="Watson loading GIF" />
+					</div>
+				);
 		}
 
 		return pageToRender;

@@ -15,40 +15,61 @@ const Bluebird = require('bluebird');
 
 /* filters events that match up with WCS trained tone intents */
 const filterEvents = async (toneResults) => {
-  const albums = {};      
+  const albums = {};
   const albumKeys = _.keys(toneResults);
   const allReturnSentences = {};
-  for(let i = 0; i < albumKeys.length; i++) {    
+  for(let i = 0; i < albumKeys.length; i++) {
     const emotion = toneResults[albumKeys[i]];
     albums[albumKeys[i]] = emotion;
-    allReturnSentences[albumKeys[i]] = [];    
+    allReturnSentences[albumKeys[i]] = [];
     const emotionKeys = _.keys(emotion);
     for(let j = 0; j < emotionKeys.length; j++) {
-      const promises = [];  
+      const promises = [];
       const accepted = [];
-      const analysisList = emotion[emotionKeys[j]];      
+      const analysisList = emotion[emotionKeys[j]];
       for (let k = 0; k < analysisList.length; k++) {
         const analysis = analysisList[k];
         promises.push(watsonConversation.getIntents(analysis.sentence));
       }
-      
-      const resolvedPromises = await Promise.all(promises);      
-      for(let k = 0; k < resolvedPromises.length; k++) {        
+
+      const resolvedPromises = await Promise.all(promises);
+      for(let k = 0; k < resolvedPromises.length; k++) {
         const convSentence = resolvedPromises[k];
         if (convSentence.length > 0 && 'intent' in convSentence[0]) {
           const isEqual = convSentence[0].intent.toLowerCase() ===
-            analysisList[k].tone_id.toLowerCase();          
+            analysisList[k].tone_id.toLowerCase();
           if(isEqual) {
-            accepted.push(analysisList[k]);            
+            accepted.push(analysisList[k]);
           }
         }
-      }      
-      albums[albumKeys[i]][emotionKeys[j]] = accepted;       
+      }
+      albums[albumKeys[i]][emotionKeys[j]] = accepted;
     }
-  }  
-  return albums;  
+  }
+  return albums;
 };
 
+
+/* merges events from filter above unfilter, i.e. most important on top */
+const priorityMerge = (filter, unfilter) => {
+  // get album, emotion pairs
+  const indexPair = [];
+  _.each(unfilter, (album, albumKey) => {
+    _.each(album, (emotion, emotionKey) => {
+      indexPair.push([albumKey, emotionKey]);
+    });
+  });
+
+  // merge both using priority, via union with identity
+  _.each(indexPair, (pair) => {
+    const sub = filter[pair[0]][pair[1]];
+    const all = unfilter[pair[0]][pair[1]];
+    const union = _.unionBy(sub, all, 'sentence');
+    filter[pair[0]][pair[1]] = union;
+  });
+
+  return filter;
+};
 
 /* merges events from filter above unfilter, i.e. most important on top */
 const priorityMerge = (filter, unfilter) => {
@@ -78,9 +99,9 @@ const getLifeEventsData = async (artistName, artistResults) => {
     let wikiEvents = await eventsScraper.getLifeEvents({'artist': artistName, 'albums': outlierAlbums});
     wikiEvents = _.pickBy(wikiEvents, _.identity);
     const topTones = await toneAnalyzer.getToneEvents(wikiEvents, artistName);
-    const unfilteredTones = _.cloneDeep(topTones);        
-    const filteredTones = await filterEvents(topTones);            
-    return priorityMerge(filteredTones, unfilteredTones);    
+    const unfilteredTones = _.cloneDeep(topTones);
+    const filteredTones = await filterEvents(topTones);
+    return priorityMerge(filteredTones, unfilteredTones);
 };
 
 
@@ -92,7 +113,7 @@ const getLifeEventsData = async (artistName, artistResults) => {
  * run personality insights on it
  */
 exports.run = async (artistName) => {
-	try {    
+	try {
 		// Scrape inital album list from AZLyrics
 		// TODO: Don't mutate scrapedAlbums so much
 		let scrapedAlbums = await scraper.getAlbums(artistName);
@@ -176,20 +197,21 @@ exports.run = async (artistName) => {
 			resultJson.albums[i].insights = insight;
 		});
 		console.log('Personality Insights received');
-    
+
 		// add life events
     const wikiEvents = await getLifeEventsData(artistName, resultJson);
     resultJson.lifeEvents = wikiEvents;
 
-    // add biography description
-    const bio = await bioScraper.getBio(artistName);
-    resultJson.bio = bio;
-    
+		try {
+			// add biography description
+			const bio = await bioScraper.getBio(artistName);
+			resultJson.bio = bio;
+		} catch (e) {
+			console.log("Couldn't make a bio");
+		}
+
     console.log(`Final Artist Results: ${JSON.stringify(resultJson, null, 4)}`);
     return resultJson;
-
-		// And we oooout
-		console.log('DONE');
 	} catch (err) {
 		throw err;
 	}
@@ -197,9 +219,9 @@ exports.run = async (artistName) => {
 
 /* local test--reads from json file in project dir */
 // (async function () {
-//     const readFile = util.promisify(fs.readFile);     
+//     const readFile = util.promisify(fs.readFile);
 //     let kanye = await readFile(__dirname + '/artists_results/kanyewest.json', 'UTF-8');
-//     kanye = JSON.parse(kanye);		        
+//     kanye = JSON.parse(kanye);
 //     const wikiEvents = await getLifeEventsData('Kanye West', kanye);
 //     kanye.lifeEvents = wikiEvents;
 //     const bio = await bioScraper.getBio('Kanye West');

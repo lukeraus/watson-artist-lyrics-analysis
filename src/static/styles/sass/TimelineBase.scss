@@ -1,0 +1,9 @@
+.sloading-container {
+	display: flex;
+
+	.gif {
+		margin: auto;
+		width: 256px;
+		filter: invert(1);
+	}
+}

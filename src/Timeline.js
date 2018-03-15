@@ -147,11 +147,17 @@ class Timeline extends Component {
 			);
 		});
 
+		let artistBio = null;
+
+		if (this.props.bio && this.props.bio[0].length > 0) {
+			artistBio = <ArtistBio bio={this.props.bio.join('\n')}/>
+		}
+
 		return (
 			<div className="timeline-root">
 				<TimelineHeader artist={this.props.artist} />
 				<div className="body-root">
-					<ArtistBio artist={this.props.artist} />
+					{artistBio}
 					<div className="timeline-base">
 						<div
 							className="row insights"

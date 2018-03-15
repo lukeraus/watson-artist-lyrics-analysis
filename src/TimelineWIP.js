@@ -8,31 +8,44 @@ class TimelineWIP extends Component {
     super(props);
 
     this.submitEmail = this.submitEmail.bind(this);
-
     this.state = {
-      emailInput: ''
+      emailInput: '',
+      sent: false
     };
   }
 
   updateEmailInput = (event) => {
-    console.log(event);
     this.setState({
       emailInput: event.target.value
     });
   }
 
-  async submitEmail() {
-    console.log(this.state.emailInput);
-    const pingBack = await fetch('/artistList');
-    console.log(pingBack);
-    const text = await pingBack.text();
-    console.log(text);
+  submitEmail() {
+    fetch('/startDataRetriever', {
+			body: JSON.stringify({
+          search: this.props.artist,
+          email: this.state.emailInput
+        }),
+			headers: {
+				'Content-Type': 'application/json',
+				Accept: 'application/json'
+			},
+			method: 'POST'
+		});
     this.setState({
-      emailInput: ''
+      emailInput: '',
+      sent: true
     });
   }
 
+  handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      this.submitEmail();
+    }
+  }
+
   render() {
+    const emailConfirmed = this.state.sent ? 'email-confirmed visible' : 'email-confirmed';
     return (
       <div className="wip-page">
         <div className="content">
@@ -40,7 +53,7 @@ class TimelineWIP extends Component {
           <div className="loading-description">
             <h1 className="sorry">Sorry!</h1>
             <p className="desc">
-              {`We're still working on this artist. Leave us your email
+              {`We're still working on ${this.props.artist}. Leave us your email
               and we'll let you know when we're done!`}
             </p>
           </div>
@@ -50,6 +63,7 @@ class TimelineWIP extends Component {
               type="text"
               placeholder="email"
               value={this.state.emailInput}
+              onKeyDown={this.handleKeyDown}
               onChange={this.updateEmailInput}
             />
             <button
@@ -59,6 +73,9 @@ class TimelineWIP extends Component {
               +
             </button>
           </div>
+          <p className={emailConfirmed}>
+            Email confirmed, thank you!
+          </p>
         </div>
       </div>
     );
