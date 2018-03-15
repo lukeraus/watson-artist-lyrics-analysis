@@ -1,36 +1,64 @@
 @import './utils.scss';
 
 .nav {
-	height: $nav-height;
-	background: $black;
+  height: 64px;
+  background: #272727; }
 
-	.nav-button {
-		display: inline-block;
-		height: 100%;
+  .nav .nav-button {
+    display: inline-block;
+    font-size: 24px;
+    text-decoration: none;
+    color: #ffffff;
+    border: none;
+    background: none;
+    transition: background-color 0.2s; }
 
-		font-size: 24px;
-		text-decoration: none;
-		color: $white;
+    .nav .nav-button:first-child:hover, .nav .nav-button:focus {
+      background: #595859;
+      cursor: pointer; }
+			
+    .nav .nav-button .nav-button-content {
+      height: 34px;
+      padding: 12px;
+      margin-top: 6px;
+      font-weight: 400; }
 
-		border: none;
-		background: none;
-		transition: background-color 0.2s;
-		border-right: 1px solid $white;
-
-		&:not(:first-child) {
-			border-left: 1px solid $white;
-		}
-
-		&:hover, &:focus {
-			background: #595859;
-			cursor: pointer;
-		}
-
-		.nav-button-content {
-			width: 64px;
-			height: 34px;
-			padding: 12px;
-			margin-top: 6px;
-		}
-	}
+.searchBar {
+  float: right;
+  margin-top: 16px;
+  margin-right: 16px;
 }
+
+.searchBar input {
+  width: 250px;
+  font-size: 20px;
+  height: 22px;
+  background-color: transparent;
+  border: 0;
+  border-bottom: 2px solid white;
+  color: white;
+  font-weight: 300;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: white;
+    opacity: 1; /* Firefox */
+    font-weight: 300;
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: white;
+    font-weight: 300;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+    color: white;
+    font-weight: 300;
+}
+
+.searchIcon > svg {
+  height: 22px;
+  width: 22px;
+  padding-left: 10px;
+  padding-bottom: 5px;
+  cursor: pointer; }
