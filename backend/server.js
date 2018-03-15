@@ -192,7 +192,7 @@ app.post('/startDataRetriever', function (req, res) {
           from: 'spacejam2042@gmail.com',
           to: email,
           subject: `Watson Lyrics Analyzer Done for ${searchTerm}!`,
-          text: `Congrats! Watson has successfully ${searchTerm}'s albums and lyrics. Please drop us a visit to see it!`
+          text: `Congrats! Watson has successfully analyzed ${searchTerm}'s albums and lyrics. Please drop us a visit to see it!`
         };
         emailClient.sendMail(mailOptions);
       }
