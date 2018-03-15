@@ -18,6 +18,7 @@ exports.search = async (artistName) => {
 		
 		if (artist.errorMessage) {
 			console.log('Artist:' + artistName + ' not found on spotify');
+			console.log(artist);
 			return false;
 		} else {
 			console.log('Artist found on spotify as: ' +  artist.name);
