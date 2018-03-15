@@ -14,7 +14,6 @@ class Main extends Component {
 	}
 
 	search = (artist) => {
-		console.log(artist);
 		this.setState({artist});
 		this.props.history.push(`/timeline`);
 	}
