@@ -1,6 +1,7 @@
 @import './utils.scss';
 
 .wip-page {
+	margin-top: $nav-height;
 	height: calc(100vh - #{$nav-height});
 	// background: $black;
 	display: flex;
