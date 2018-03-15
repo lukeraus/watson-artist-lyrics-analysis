@@ -11,9 +11,17 @@ class Main extends Component {
 		this.state = {
 			artist: ''
 		};
+		this.titleCase = this.titleCase.bind(this);
+	}
+
+	titleCase(str) {
+		return str.toLowerCase().split(' ').map(function(word) {
+			return (word.charAt(0).toUpperCase() + word.slice(1));
+		}).join(' ');
 	}
 
 	search = (artist) => {
+		artist = this.titleCase(artist);
 		this.setState({artist});
 		this.props.history.push(`/timeline`);
 	}
